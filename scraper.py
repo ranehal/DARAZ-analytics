@@ -7,6 +7,7 @@ import re, json, time, random, hashlib, argparse, logging
 from datetime import date
 from urllib.parse import urlencode, urljoin, urlparse, parse_qs
 import requests
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from db import init_db, upsert_category, upsert_product, insert_price, get_all_categories
 
 # ── Config ───────────────────────────────────────────────────────────────────
@@ -260,11 +261,18 @@ def run(max_pages: int = 100, categories_only: bool = False):
         log.info("Categories updated, exiting.")
         return
 
-    for cat_id, slug, url in cat_list:
-        try:
-            scrape_category_products(cat_id, slug, url, max_pages)
-        except Exception as exc:
-            log.warning("Category %s live fetch error: %s", slug, exc)
+    MAX_WORKERS = 5
+    with ThreadPoolExecutor(max_workers=MAX_WORKERS) as executor:
+        futures = {
+            executor.submit(scrape_category_products, cat_id, slug, url, max_pages): (cat_id, slug)
+            for cat_id, slug, url in cat_list
+        }
+        for future in as_completed(futures):
+            cat_id, slug = futures[future]
+            try:
+                future.result()
+            except Exception as exc:
+                log.warning("Category %s live fetch error: %s", slug, exc)
 
     log.info("=== Live API Scrape complete ===")
 
