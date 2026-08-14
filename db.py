@@ -160,7 +160,11 @@ def get_price_history(item_id, days=180):
         rows = conn.execute("""
             SELECT price, original, discount, rating, review_cnt, sold_cnt, in_stock, scraped_at
             FROM price_history
-            WHERE product_id=? AND scraped_at >= datetime('now', ?)
+            WHERE id IN (
+                SELECT MAX(id) FROM price_history
+                WHERE product_id=? AND scraped_at >= datetime('now', ?)
+                GROUP BY date(scraped_at)
+            )
             ORDER BY scraped_at ASC
         """, (row[0], f"-{days} days")).fetchall()
         return [dict(r) for r in rows]

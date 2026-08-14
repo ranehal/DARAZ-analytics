@@ -10,7 +10,7 @@
     "unit": "pcs",
     "unit_qty": 5.0,
     "created_at": "2026-08-02 21:27:44",
-    "updated_at": "2026-08-02 21:27:44"
+    "updated_at": "2026-08-13 17:31:13"
   },
   "history": [
     {
@@ -22,11 +22,71 @@
       "sold_cnt": null,
       "in_stock": 1,
       "scraped_at": "2026-08-02 21:27:44"
+    },
+    {
+      "price": 180.0,
+      "original": 200.0,
+      "discount": 10.0,
+      "rating": 5.0,
+      "review_cnt": 1,
+      "sold_cnt": null,
+      "in_stock": 1,
+      "scraped_at": "2026-08-10 21:25:39"
+    },
+    {
+      "price": 180.0,
+      "original": 200.0,
+      "discount": 10.0,
+      "rating": 5.0,
+      "review_cnt": 1,
+      "sold_cnt": null,
+      "in_stock": 1,
+      "scraped_at": "2026-08-11 23:26:08"
+    },
+    {
+      "price": 180.0,
+      "original": 200.0,
+      "discount": 10.0,
+      "rating": 5.0,
+      "review_cnt": 1,
+      "sold_cnt": null,
+      "in_stock": 1,
+      "scraped_at": "2026-08-12 21:20:02"
+    },
+    {
+      "price": 180.0,
+      "original": 200.0,
+      "discount": 10.0,
+      "rating": 5.0,
+      "review_cnt": 1,
+      "sold_cnt": null,
+      "in_stock": 1,
+      "scraped_at": "2026-08-13 17:31:13"
     }
   ],
   "unit_history": [
     {
       "scraped_at": "2026-08-02 21:27:44",
+      "unit_price": 36.0,
+      "unit": "pcs"
+    },
+    {
+      "scraped_at": "2026-08-10 21:25:39",
+      "unit_price": 36.0,
+      "unit": "pcs"
+    },
+    {
+      "scraped_at": "2026-08-11 23:26:08",
+      "unit_price": 36.0,
+      "unit": "pcs"
+    },
+    {
+      "scraped_at": "2026-08-12 21:20:02",
+      "unit_price": 36.0,
+      "unit": "pcs"
+    },
+    {
+      "scraped_at": "2026-08-13 17:31:13",
       "unit_price": 36.0,
       "unit": "pcs"
     }
@@ -35,8 +95,8 @@
     "min_price": 180.0,
     "max_price": 180.0,
     "avg_price": 180.0,
-    "data_points": 1,
+    "data_points": 14,
     "first_seen": "2026-08-02 21:27:44",
-    "last_seen": "2026-08-02 21:27:44"
+    "last_seen": "2026-08-13 17:31:13"
   }
 }

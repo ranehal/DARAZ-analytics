@@ -10,7 +10,7 @@
     "unit": "pcs",
     "unit_qty": 1.0,
     "created_at": "2026-08-02 21:27:42",
-    "updated_at": "2026-08-02 21:27:42"
+    "updated_at": "2026-08-13 17:31:03"
   },
   "history": [
     {
@@ -22,11 +22,71 @@
       "sold_cnt": null,
       "in_stock": 1,
       "scraped_at": "2026-08-02 21:27:42"
+    },
+    {
+      "price": 269.0,
+      "original": 375.0,
+      "discount": 28.0,
+      "rating": null,
+      "review_cnt": null,
+      "sold_cnt": null,
+      "in_stock": 1,
+      "scraped_at": "2026-08-10 21:25:33"
+    },
+    {
+      "price": 269.0,
+      "original": 375.0,
+      "discount": 28.0,
+      "rating": null,
+      "review_cnt": null,
+      "sold_cnt": null,
+      "in_stock": 1,
+      "scraped_at": "2026-08-11 23:25:55"
+    },
+    {
+      "price": 269.0,
+      "original": 375.0,
+      "discount": 28.0,
+      "rating": null,
+      "review_cnt": null,
+      "sold_cnt": null,
+      "in_stock": 1,
+      "scraped_at": "2026-08-12 21:20:00"
+    },
+    {
+      "price": 269.0,
+      "original": 375.0,
+      "discount": 28.0,
+      "rating": null,
+      "review_cnt": null,
+      "sold_cnt": null,
+      "in_stock": 1,
+      "scraped_at": "2026-08-13 17:31:03"
     }
   ],
   "unit_history": [
     {
       "scraped_at": "2026-08-02 21:27:42",
+      "unit_price": 269.0,
+      "unit": "pcs"
+    },
+    {
+      "scraped_at": "2026-08-10 21:25:33",
+      "unit_price": 269.0,
+      "unit": "pcs"
+    },
+    {
+      "scraped_at": "2026-08-11 23:25:55",
+      "unit_price": 269.0,
+      "unit": "pcs"
+    },
+    {
+      "scraped_at": "2026-08-12 21:20:00",
+      "unit_price": 269.0,
+      "unit": "pcs"
+    },
+    {
+      "scraped_at": "2026-08-13 17:31:03",
       "unit_price": 269.0,
       "unit": "pcs"
     }
@@ -35,8 +95,8 @@
     "min_price": 269.0,
     "max_price": 269.0,
     "avg_price": 269.0,
-    "data_points": 1,
+    "data_points": 14,
     "first_seen": "2026-08-02 21:27:42",
-    "last_seen": "2026-08-02 21:27:42"
+    "last_seen": "2026-08-13 17:31:03"
   }
 }

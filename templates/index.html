@@ -385,6 +385,18 @@
     let isAllTimeLow = false;
     let priceChart = null;
     let allProductsCache = null;
+    let searchTimer = null;
+
+    const GRID_LIMIT = 240;
+
+    function dedupeByDate(rows) {
+      const byDate = new Map();
+      for (const r of rows) {
+        const d = (r.scraped_at || "").split(" ")[0];
+        if (d) byDate.set(d, r);
+      }
+      return Array.from(byDate.values());
+    }
 
     async function apiFetch(url, staticUrl) {
       try {
@@ -404,7 +416,8 @@
       loadProducts();
 
       document.getElementById("searchInput").addEventListener("input", (e) => {
-        loadProducts(currentCategory, e.target.value);
+        clearTimeout(searchTimer);
+        searchTimer = setTimeout(() => loadProducts(currentCategory, e.target.value), 200);
       });
 
       document.getElementById("btnAlltimeLow").addEventListener("click", () => {
@@ -495,6 +508,7 @@
       if (catId) params.push(`category_id=${catId}`);
       if (search) params.push(`search=${encodeURIComponent(search)}`);
       if (isAllTimeLow) params.push(`alltime_low=true`);
+      params.push(`limit=${GRID_LIMIT}`);
       if (params.length > 0) url += `?${params.join('&')}`;
 
       let prods = await apiFetch(url, null);
@@ -508,7 +522,7 @@
           if (search && !p.name.toLowerCase().includes(search.toLowerCase())) return false;
           if (isAllTimeLow && !(p.min_price && p.price <= p.min_price * 1.02)) return false;
           return true;
-        });
+        }).slice(0, GRID_LIMIT);
       }
 
       const grid = document.getElementById("productsGrid");
@@ -525,7 +539,7 @@
             <div class="img-container">
               ${isMin ? `<div class="badge-low">LOWEST</div>` : ''}
               ${p.unit_str ? `<div class="badge-unit">${p.unit_str}</div>` : ''}
-              <img src="${p.image || 'https://via.placeholder.com/200'}" alt="${p.name}">
+              <img loading="lazy" src="${p.image || 'https://via.placeholder.com/200'}" alt="${p.name}">
             </div>
             <div class="prod-body">
               <div class="prod-title">${p.name}</div>
@@ -540,6 +554,14 @@
           </div>
         `;
       }).join("");
+
+      if (prods.length >= GRID_LIMIT) {
+        grid.insertAdjacentHTML("beforeend", `
+          <div style="grid-column: 1/-1; text-align: center; padding: 1rem; color: var(--text-muted); font-size: 0.85rem;">
+            Showing first ${GRID_LIMIT} of ${prods.length}+ products — refine your search or pick a category.
+          </div>
+        `);
+      }
     }
 
     async function showProductHistory(itemId) {
@@ -547,8 +569,8 @@
       if (!data || !data.history) return;
 
       const p = data.product;
-      const history = data.history;
-      const unitHist = data.unit_history || [];
+      const history = dedupeByDate(data.history);
+      const unitHist = dedupeByDate(data.unit_history || []);
 
       document.getElementById("mProdName").innerText = p.name;
       document.getElementById("mProdSub").innerText = `Brand: ${p.brand || 'Generic'} • Unit: ${p.unit_qty ? (p.unit_qty + ' ' + p.unit) : 'N/A'}`;
@@ -572,7 +594,9 @@
 
       const labels = history.map(h => h.scraped_at.split(" ")[0]);
       const prices = history.map(h => h.price);
-      const unitPrices = unitHist.map(u => u.unit_price);
+      const unitPrices = (p.unit_qty && p.unit)
+        ? history.map(h => Math.round((h.price / p.unit_qty) * 100) / 100)
+        : [];
 
       const datasets = [{
         label: 'Price (৳)',
