@@ -10,7 +10,7 @@
     "unit": "pcs",
     "unit_qty": 7.0,
     "created_at": "2026-08-05 19:57:49",
-    "updated_at": "2026-08-13 17:31:26"
+    "updated_at": "2026-08-16 21:11:27"
   },
   "history": [
     {
@@ -102,6 +102,36 @@
       "sold_cnt": null,
       "in_stock": 1,
       "scraped_at": "2026-08-13 17:31:26"
+    },
+    {
+      "price": 895.0,
+      "original": 1500.0,
+      "discount": 40.0,
+      "rating": null,
+      "review_cnt": null,
+      "sold_cnt": null,
+      "in_stock": 1,
+      "scraped_at": "2026-08-14 21:24:09"
+    },
+    {
+      "price": 899.0,
+      "original": 1200.0,
+      "discount": 25.0,
+      "rating": null,
+      "review_cnt": null,
+      "sold_cnt": null,
+      "in_stock": 1,
+      "scraped_at": "2026-08-15 21:21:35"
+    },
+    {
+      "price": 899.0,
+      "original": 1200.0,
+      "discount": 25.0,
+      "rating": null,
+      "review_cnt": null,
+      "sold_cnt": null,
+      "in_stock": 1,
+      "scraped_at": "2026-08-16 21:11:27"
     }
   ],
   "unit_history": [
@@ -149,14 +179,29 @@
       "scraped_at": "2026-08-13 17:31:26",
       "unit_price": 128.43,
       "unit": "pcs"
+    },
+    {
+      "scraped_at": "2026-08-14 21:24:09",
+      "unit_price": 127.86,
+      "unit": "pcs"
+    },
+    {
+      "scraped_at": "2026-08-15 21:21:35",
+      "unit_price": 128.43,
+      "unit": "pcs"
+    },
+    {
+      "scraped_at": "2026-08-16 21:11:27",
+      "unit_price": 128.43,
+      "unit": "pcs"
     }
   ],
   "stats": {
     "min_price": 895.0,
     "max_price": 950.0,
-    "avg_price": 909.9166666666666,
-    "data_points": 24,
+    "avg_price": 905.4102564102565,
+    "data_points": 39,
     "first_seen": "2026-08-05 19:57:49",
-    "last_seen": "2026-08-13 17:31:26"
+    "last_seen": "2026-08-16 21:11:27"
   }
 }

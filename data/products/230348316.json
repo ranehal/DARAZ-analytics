@@ -10,7 +10,7 @@
     "unit": "roll",
     "unit_qty": 1.0,
     "created_at": "2026-08-13 12:38:31",
-    "updated_at": "2026-08-13 13:30:37"
+    "updated_at": "2026-08-14 07:01:35"
   },
   "history": [
     {
@@ -22,11 +22,26 @@
       "sold_cnt": null,
       "in_stock": 1,
       "scraped_at": "2026-08-13 13:30:37"
+    },
+    {
+      "price": 79.0,
+      "original": 139.0,
+      "discount": 43.0,
+      "rating": 4.909090909090909,
+      "review_cnt": 11,
+      "sold_cnt": null,
+      "in_stock": 1,
+      "scraped_at": "2026-08-14 07:01:35"
     }
   ],
   "unit_history": [
     {
       "scraped_at": "2026-08-13 13:30:37",
+      "unit_price": 79.0,
+      "unit": "roll"
+    },
+    {
+      "scraped_at": "2026-08-14 07:01:35",
       "unit_price": 79.0,
       "unit": "roll"
     }
@@ -35,8 +50,8 @@
     "min_price": 79.0,
     "max_price": 79.0,
     "avg_price": 79.0,
-    "data_points": 2,
+    "data_points": 3,
     "first_seen": "2026-08-13 12:38:31",
-    "last_seen": "2026-08-13 13:30:37"
+    "last_seen": "2026-08-14 07:01:35"
   }
 }
