@@ -10,7 +10,7 @@
     "unit": "pcs",
     "unit_qty": 2.0,
     "created_at": "2026-08-10 20:28:18",
-    "updated_at": "2026-08-16 21:11:10"
+    "updated_at": "2026-08-20 21:12:31"
   },
   "history": [
     {
@@ -82,6 +82,46 @@
       "sold_cnt": null,
       "in_stock": 1,
       "scraped_at": "2026-08-16 21:11:10"
+    },
+    {
+      "price": 89.0,
+      "original": 190.0,
+      "discount": 53.0,
+      "rating": null,
+      "review_cnt": null,
+      "sold_cnt": null,
+      "in_stock": 1,
+      "scraped_at": "2026-08-17 21:24:26"
+    },
+    {
+      "price": 89.0,
+      "original": 190.0,
+      "discount": 53.0,
+      "rating": null,
+      "review_cnt": null,
+      "sold_cnt": null,
+      "in_stock": 1,
+      "scraped_at": "2026-08-18 21:27:24"
+    },
+    {
+      "price": 89.0,
+      "original": 190.0,
+      "discount": 53.0,
+      "rating": null,
+      "review_cnt": null,
+      "sold_cnt": null,
+      "in_stock": 1,
+      "scraped_at": "2026-08-19 21:18:34"
+    },
+    {
+      "price": 89.0,
+      "original": 190.0,
+      "discount": 53.0,
+      "rating": null,
+      "review_cnt": null,
+      "sold_cnt": null,
+      "in_stock": 1,
+      "scraped_at": "2026-08-20 21:12:31"
     }
   ],
   "unit_history": [
@@ -119,14 +159,34 @@
       "scraped_at": "2026-08-16 21:11:10",
       "unit_price": 44.5,
       "unit": "pcs"
+    },
+    {
+      "scraped_at": "2026-08-17 21:24:26",
+      "unit_price": 44.5,
+      "unit": "pcs"
+    },
+    {
+      "scraped_at": "2026-08-18 21:27:24",
+      "unit_price": 44.5,
+      "unit": "pcs"
+    },
+    {
+      "scraped_at": "2026-08-19 21:18:34",
+      "unit_price": 44.5,
+      "unit": "pcs"
+    },
+    {
+      "scraped_at": "2026-08-20 21:12:31",
+      "unit_price": 44.5,
+      "unit": "pcs"
     }
   ],
   "stats": {
     "min_price": 89.0,
     "max_price": 89.0,
     "avg_price": 89.0,
-    "data_points": 29,
+    "data_points": 38,
     "first_seen": "2026-08-10 20:28:18",
-    "last_seen": "2026-08-16 21:11:10"
+    "last_seen": "2026-08-20 21:12:31"
   }
 }

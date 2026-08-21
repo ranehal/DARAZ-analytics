@@ -10,7 +10,7 @@
     "unit": "mm",
     "unit_qty": 9.5,
     "created_at": "2026-08-02 21:22:41",
-    "updated_at": "2026-08-16 21:11:14"
+    "updated_at": "2026-08-20 21:12:36"
   },
   "history": [
     {
@@ -92,6 +92,46 @@
       "sold_cnt": null,
       "in_stock": 1,
       "scraped_at": "2026-08-16 21:11:14"
+    },
+    {
+      "price": 163.0,
+      "original": 250.0,
+      "discount": 35.0,
+      "rating": 4.602209944751381,
+      "review_cnt": 181,
+      "sold_cnt": null,
+      "in_stock": 1,
+      "scraped_at": "2026-08-17 21:24:42"
+    },
+    {
+      "price": 163.0,
+      "original": 250.0,
+      "discount": 35.0,
+      "rating": 4.602209944751381,
+      "review_cnt": 181,
+      "sold_cnt": null,
+      "in_stock": 1,
+      "scraped_at": "2026-08-18 21:27:36"
+    },
+    {
+      "price": 163.0,
+      "original": 250.0,
+      "discount": 35.0,
+      "rating": 4.602209944751381,
+      "review_cnt": 181,
+      "sold_cnt": null,
+      "in_stock": 1,
+      "scraped_at": "2026-08-19 21:18:47"
+    },
+    {
+      "price": 163.0,
+      "original": 250.0,
+      "discount": 35.0,
+      "rating": 4.602209944751381,
+      "review_cnt": 181,
+      "sold_cnt": null,
+      "in_stock": 1,
+      "scraped_at": "2026-08-20 21:12:36"
     }
   ],
   "unit_history": [
@@ -134,14 +174,34 @@
       "scraped_at": "2026-08-16 21:11:14",
       "unit_price": 17.37,
       "unit": "mm"
+    },
+    {
+      "scraped_at": "2026-08-17 21:24:42",
+      "unit_price": 17.16,
+      "unit": "mm"
+    },
+    {
+      "scraped_at": "2026-08-18 21:27:36",
+      "unit_price": 17.16,
+      "unit": "mm"
+    },
+    {
+      "scraped_at": "2026-08-19 21:18:47",
+      "unit_price": 17.16,
+      "unit": "mm"
+    },
+    {
+      "scraped_at": "2026-08-20 21:12:36",
+      "unit_price": 17.16,
+      "unit": "mm"
     }
   ],
   "stats": {
     "min_price": 163.0,
     "max_price": 165.0,
-    "avg_price": 164.61290322580646,
-    "data_points": 31,
+    "avg_price": 164.35,
+    "data_points": 40,
     "first_seen": "2026-08-02 21:22:41",
-    "last_seen": "2026-08-16 21:11:14"
+    "last_seen": "2026-08-20 21:12:36"
   }
 }

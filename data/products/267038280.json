@@ -10,7 +10,7 @@
     "unit": "pcs",
     "unit_qty": 1.0,
     "created_at": "2026-08-02 21:22:27",
-    "updated_at": "2026-08-16 21:11:10"
+    "updated_at": "2026-08-20 21:12:33"
   },
   "history": [
     {
@@ -92,6 +92,46 @@
       "sold_cnt": null,
       "in_stock": 1,
       "scraped_at": "2026-08-16 21:11:10"
+    },
+    {
+      "price": 97.0,
+      "original": 250.0,
+      "discount": 61.0,
+      "rating": 4.6,
+      "review_cnt": 10,
+      "sold_cnt": null,
+      "in_stock": 1,
+      "scraped_at": "2026-08-17 21:24:33"
+    },
+    {
+      "price": 97.0,
+      "original": 250.0,
+      "discount": 61.0,
+      "rating": 4.6,
+      "review_cnt": 10,
+      "sold_cnt": null,
+      "in_stock": 1,
+      "scraped_at": "2026-08-18 21:27:24"
+    },
+    {
+      "price": 97.0,
+      "original": 250.0,
+      "discount": 61.0,
+      "rating": 4.6,
+      "review_cnt": 10,
+      "sold_cnt": null,
+      "in_stock": 1,
+      "scraped_at": "2026-08-19 21:18:37"
+    },
+    {
+      "price": 97.0,
+      "original": 250.0,
+      "discount": 61.0,
+      "rating": 4.636363636363637,
+      "review_cnt": 11,
+      "sold_cnt": null,
+      "in_stock": 1,
+      "scraped_at": "2026-08-20 21:12:33"
     }
   ],
   "unit_history": [
@@ -134,14 +174,34 @@
       "scraped_at": "2026-08-16 21:11:10",
       "unit_price": 97.0,
       "unit": "pcs"
+    },
+    {
+      "scraped_at": "2026-08-17 21:24:33",
+      "unit_price": 97.0,
+      "unit": "pcs"
+    },
+    {
+      "scraped_at": "2026-08-18 21:27:24",
+      "unit_price": 97.0,
+      "unit": "pcs"
+    },
+    {
+      "scraped_at": "2026-08-19 21:18:37",
+      "unit_price": 97.0,
+      "unit": "pcs"
+    },
+    {
+      "scraped_at": "2026-08-20 21:12:33",
+      "unit_price": 97.0,
+      "unit": "pcs"
     }
   ],
   "stats": {
     "min_price": 97.0,
     "max_price": 97.0,
     "avg_price": 97.0,
-    "data_points": 31,
+    "data_points": 40,
     "first_seen": "2026-08-02 21:22:27",
-    "last_seen": "2026-08-16 21:11:10"
+    "last_seen": "2026-08-20 21:12:33"
   }
 }

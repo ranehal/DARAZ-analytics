@@ -276,6 +276,14 @@ def run(max_pages: int = 100, categories_only: bool = False):
 
     log.info("=== Live API Scrape complete ===")
 
+    # Auto-export static JSON for GitHub Pages hosting
+    try:
+        from export_static import export as export_static_json
+        log.info("Exporting static data for GitHub Pages...")
+        export_static_json()
+    except Exception as exc:
+        log.warning("Failed to auto-export static data: %s", exc)
+
 if __name__ == "__main__":
     ap = argparse.ArgumentParser(description="Daraz Live API Price Scraper")
     ap.add_argument("--pages",           type=int, default=100, help="Max pages per category (default: 100 = 4,000 items/cat)")
