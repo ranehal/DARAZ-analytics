@@ -10,7 +10,7 @@
     "unit": "pcs",
     "unit_qty": 5.0,
     "created_at": "2026-08-05 19:55:03",
-    "updated_at": "2026-08-20 21:12:57"
+    "updated_at": "2026-08-27 11:01:56"
   },
   "history": [
     {
@@ -112,6 +112,46 @@
       "sold_cnt": null,
       "in_stock": 1,
       "scraped_at": "2026-08-20 21:12:57"
+    },
+    {
+      "price": 283.0,
+      "original": 706.0,
+      "discount": 60.0,
+      "rating": 3.6666666666666665,
+      "review_cnt": 3,
+      "sold_cnt": null,
+      "in_stock": 1,
+      "scraped_at": "2026-08-22 21:09:28"
+    },
+    {
+      "price": 283.0,
+      "original": 706.0,
+      "discount": 60.0,
+      "rating": 3.6666666666666665,
+      "review_cnt": 3,
+      "sold_cnt": null,
+      "in_stock": 1,
+      "scraped_at": "2026-08-24 21:15:35"
+    },
+    {
+      "price": 283.0,
+      "original": 706.0,
+      "discount": 60.0,
+      "rating": 3.6666666666666665,
+      "review_cnt": 3,
+      "sold_cnt": null,
+      "in_stock": 1,
+      "scraped_at": "2026-08-25 21:40:56"
+    },
+    {
+      "price": 282.0,
+      "original": 706.0,
+      "discount": 60.0,
+      "rating": 3.6666666666666665,
+      "review_cnt": 3,
+      "sold_cnt": null,
+      "in_stock": 1,
+      "scraped_at": "2026-08-27 11:01:56"
     }
   ],
   "unit_history": [
@@ -164,14 +204,34 @@
       "scraped_at": "2026-08-20 21:12:57",
       "unit_price": 56.6,
       "unit": "pcs"
+    },
+    {
+      "scraped_at": "2026-08-22 21:09:28",
+      "unit_price": 56.6,
+      "unit": "pcs"
+    },
+    {
+      "scraped_at": "2026-08-24 21:15:35",
+      "unit_price": 56.6,
+      "unit": "pcs"
+    },
+    {
+      "scraped_at": "2026-08-25 21:40:56",
+      "unit_price": 56.6,
+      "unit": "pcs"
+    },
+    {
+      "scraped_at": "2026-08-27 11:01:56",
+      "unit_price": 56.4,
+      "unit": "pcs"
     }
   ],
   "stats": {
-    "min_price": 283.0,
+    "min_price": 282.0,
     "max_price": 286.0,
-    "avg_price": 283.625,
-    "data_points": 24,
+    "avg_price": 283.4375,
+    "data_points": 32,
     "first_seen": "2026-08-05 19:55:03",
-    "last_seen": "2026-08-20 21:12:57"
+    "last_seen": "2026-08-27 11:01:56"
   }
 }

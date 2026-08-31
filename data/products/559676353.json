@@ -10,7 +10,7 @@
     "unit": "pcs",
     "unit_qty": 2.0,
     "created_at": "2026-08-14 07:01:16",
-    "updated_at": "2026-08-17 21:25:31"
+    "updated_at": "2026-08-29 10:29:42"
   },
   "history": [
     {
@@ -42,6 +42,46 @@
       "sold_cnt": null,
       "in_stock": 1,
       "scraped_at": "2026-08-17 21:25:31"
+    },
+    {
+      "price": 256.0,
+      "original": 690.0,
+      "discount": 63.0,
+      "rating": 5.0,
+      "review_cnt": 26,
+      "sold_cnt": null,
+      "in_stock": 1,
+      "scraped_at": "2026-08-21 21:14:21"
+    },
+    {
+      "price": 256.0,
+      "original": 690.0,
+      "discount": 63.0,
+      "rating": 5.0,
+      "review_cnt": 26,
+      "sold_cnt": null,
+      "in_stock": 1,
+      "scraped_at": "2026-08-22 21:09:31"
+    },
+    {
+      "price": 256.0,
+      "original": 690.0,
+      "discount": 63.0,
+      "rating": 5.0,
+      "review_cnt": 26,
+      "sold_cnt": null,
+      "in_stock": 1,
+      "scraped_at": "2026-08-24 21:15:41"
+    },
+    {
+      "price": 256.0,
+      "original": 692.0,
+      "discount": 63.0,
+      "rating": 5.0,
+      "review_cnt": 26,
+      "sold_cnt": null,
+      "in_stock": 1,
+      "scraped_at": "2026-08-29 10:29:42"
     }
   ],
   "unit_history": [
@@ -59,14 +99,34 @@
       "scraped_at": "2026-08-17 21:25:31",
       "unit_price": 128.0,
       "unit": "pcs"
+    },
+    {
+      "scraped_at": "2026-08-21 21:14:21",
+      "unit_price": 128.0,
+      "unit": "pcs"
+    },
+    {
+      "scraped_at": "2026-08-22 21:09:31",
+      "unit_price": 128.0,
+      "unit": "pcs"
+    },
+    {
+      "scraped_at": "2026-08-24 21:15:41",
+      "unit_price": 128.0,
+      "unit": "pcs"
+    },
+    {
+      "scraped_at": "2026-08-29 10:29:42",
+      "unit_price": 128.0,
+      "unit": "pcs"
     }
   ],
   "stats": {
     "min_price": 256.0,
     "max_price": 256.0,
     "avg_price": 256.0,
-    "data_points": 7,
+    "data_points": 13,
     "first_seen": "2026-08-14 07:01:16",
-    "last_seen": "2026-08-17 21:25:31"
+    "last_seen": "2026-08-29 10:29:42"
   }
 }
