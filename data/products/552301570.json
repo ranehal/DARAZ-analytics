@@ -10,7 +10,7 @@
     "unit": "bag",
     "unit_qty": 5.0,
     "created_at": "2026-08-10 20:27:51",
-    "updated_at": "2026-09-21 21:26:12"
+    "updated_at": "2026-09-22 20:25:41"
   },
   "history": [
     {
@@ -382,6 +382,16 @@
       "sold_cnt": null,
       "in_stock": 1,
       "scraped_at": "2026-09-21 21:26:12"
+    },
+    {
+      "price": 2106.0,
+      "original": 4786.0,
+      "discount": 56.0,
+      "rating": 5.0,
+      "review_cnt": 1,
+      "sold_cnt": null,
+      "in_stock": 1,
+      "scraped_at": "2026-09-22 20:25:41"
     }
   ],
   "unit_history": [
@@ -569,14 +579,19 @@
       "scraped_at": "2026-09-21 21:26:12",
       "unit_price": 421.2,
       "unit": "bag"
+    },
+    {
+      "scraped_at": "2026-09-22 20:25:41",
+      "unit_price": 421.2,
+      "unit": "bag"
     }
   ],
   "stats": {
     "min_price": 2098.0,
     "max_price": 2181.0,
-    "avg_price": 2136.0714285714284,
-    "data_points": 84,
+    "avg_price": 2135.7176470588233,
+    "data_points": 85,
     "first_seen": "2026-08-10 20:27:51",
-    "last_seen": "2026-09-21 21:26:12"
+    "last_seen": "2026-09-22 20:25:41"
   }
 }
