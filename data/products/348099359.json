@@ -10,7 +10,7 @@
     "unit": null,
     "unit_qty": null,
     "created_at": "2026-08-22 11:34:19",
-    "updated_at": "2026-10-01 06:08:23"
+    "updated_at": "2026-10-02 05:15:18"
   },
   "history": [
     {
@@ -212,15 +212,25 @@
       "sold_cnt": null,
       "in_stock": 1,
       "scraped_at": "2026-10-01 06:08:23"
+    },
+    {
+      "price": 819.0,
+      "original": 1139.0,
+      "discount": 28.0,
+      "rating": null,
+      "review_cnt": null,
+      "sold_cnt": null,
+      "in_stock": 1,
+      "scraped_at": "2026-10-02 05:15:18"
     }
   ],
   "unit_history": [],
   "stats": {
     "min_price": 621.0,
     "max_price": 856.0,
-    "avg_price": 757.46875,
-    "data_points": 32,
+    "avg_price": 759.3333333333334,
+    "data_points": 33,
     "first_seen": "2026-08-22 11:34:19",
-    "last_seen": "2026-10-01 06:08:23"
+    "last_seen": "2026-10-02 05:15:18"
   }
 }
