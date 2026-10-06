@@ -8,7 +8,17 @@ from datetime import date
 from urllib.parse import urlencode, urljoin, urlparse, parse_qs
 import requests
 from concurrent.futures import ThreadPoolExecutor, as_completed
-from db import init_db, upsert_category, upsert_product, insert_price, get_all_categories
+from db import (init_db, upsert_category, upsert_product, insert_price,
+                get_all_categories, upsert_campaign, save_flash_sale)
+
+# Discovery (Scrapling-powered) is optional — the core scraper must keep
+# working even when Scrapling isn't installed (e.g. on Kaggle).
+try:
+    import discovery
+    HAS_DISCOVERY = True
+except Exception:
+    discovery = None
+    HAS_DISCOVERY = False
 
 # ── Config ───────────────────────────────────────────────────────────────────
 BASE       = "https://www.daraz.com.bd"
@@ -249,6 +259,27 @@ def run(max_pages: int = 100, categories_only: bool = False):
     init_db()
     log.info("=== Daraz Live API Deep Scraper starting (Uncapped) — %s ===", date.today())
 
+    # ── Section discovery via Scrapling (flash sales, fests, campaigns) ──
+    if HAS_DISCOVERY:
+        try:
+            discovered = discovery.discover()
+            for camp in discovered.get("campaigns", []):
+                upsert_campaign(camp["slug"], camp["name"], section=camp.get("section", "campaign"),
+                                badge=camp.get("badge"), url=camp.get("url"))
+            for fs in discovered.get("flash_sales", []):
+                save_flash_sale(fs["item_id"], name=fs.get("name"), image=fs.get("image"),
+                                url=fs.get("url"), price=fs.get("price"),
+                                original=fs.get("original"), discount=fs.get("discount"),
+                                sold=fs.get("sold"))
+            log.info("Discovery complete: %d campaigns, %d flash-sale items, %d category cards.",
+                     len(discovered.get("campaigns", [])),
+                     len(discovered.get("flash_sales", [])),
+                     len(discovered.get("categories", [])))
+        except Exception as exc:
+            log.warning("Discovery failed (non-fatal): %s", exc)
+    else:
+        log.info("Scrapling discovery unavailable — skipping flash-sale/campaign harvest.")
+
     tree = fetch_category_tree()
     if tree:
         cat_list = _flatten_category_tree(tree)
@@ -259,6 +290,7 @@ def run(max_pages: int = 100, categories_only: bool = False):
 
     if categories_only:
         log.info("Categories updated, exiting.")
+        _auto_export()
         return
 
     MAX_WORKERS = 5
@@ -275,8 +307,11 @@ def run(max_pages: int = 100, categories_only: bool = False):
                 log.warning("Category %s live fetch error: %s", slug, exc)
 
     log.info("=== Live API Scrape complete ===")
+    _auto_export()
 
-    # Auto-export static JSON for GitHub Pages hosting
+
+def _auto_export():
+    """Auto-export static JSON for GitHub Pages hosting."""
     try:
         from export_static import export as export_static_json
         log.info("Exporting static data for GitHub Pages...")

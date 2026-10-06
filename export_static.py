@@ -37,7 +37,25 @@ def export():
     with open("data/products.json", "w", encoding="utf-8") as f:
         json.dump(products, f, indent=2)
 
-    # 4. Product Details
+    # 4. Campaigns & Flash Sales
+    with open("data/campaigns.json", "w", encoding="utf-8") as f:
+        json.dump(db.get_campaigns(), f, indent=2, ensure_ascii=False)
+    with open("data/flash_sales.json", "w", encoding="utf-8") as f:
+        json.dump(db.get_flash_sales(), f, indent=2, ensure_ascii=False)
+
+    # 5. Analytics payloads
+    analytics = {
+        "price_drops": db.get_price_drops(),
+        "top_discounts": db.get_top_discounts(),
+        "top_sellers": db.get_top_sellers(),
+        "category_distribution": db.get_category_distribution(),
+        "discount_distribution": db.get_discount_distribution(),
+        "price_movers": db.get_price_change_leaders(),
+    }
+    with open("data/analytics.json", "w", encoding="utf-8") as f:
+        json.dump(analytics, f, indent=2, ensure_ascii=False)
+
+    # 6. Product Details
     with db.get_conn() as conn:
         all_p = conn.execute("SELECT * FROM products").fetchall()
         for p_row in all_p:

@@ -42,6 +42,32 @@ CREATE INDEX IF NOT EXISTS idx_ph_product  ON price_history(product_id);
 CREATE INDEX IF NOT EXISTS idx_ph_scraped  ON price_history(scraped_at);
 CREATE INDEX IF NOT EXISTS idx_prod_cat    ON products(category_id);
 CREATE INDEX IF NOT EXISTS idx_cat_parent  ON categories(parent_id);
+
+CREATE TABLE IF NOT EXISTS campaigns (
+    id          INTEGER PRIMARY KEY,
+    slug        TEXT UNIQUE NOT NULL,
+    name        TEXT NOT NULL,
+    section     TEXT NOT NULL DEFAULT 'campaign',
+    badge       TEXT,
+    url         TEXT,
+    first_seen  DATETIME DEFAULT CURRENT_TIMESTAMP,
+    last_seen   DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE IF NOT EXISTS flash_sales (
+    id          INTEGER PRIMARY KEY,
+    item_id     TEXT NOT NULL,
+    name        TEXT,
+    image       TEXT,
+    url         TEXT,
+    price       REAL,
+    original    REAL,
+    discount    REAL,
+    sold        INTEGER,
+    scraped_at  DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+CREATE INDEX IF NOT EXISTS idx_fs_item   ON flash_sales(item_id);
+CREATE INDEX IF NOT EXISTS idx_fs_scrape ON flash_sales(scraped_at);
 """
 
 @contextlib.contextmanager
@@ -204,7 +230,173 @@ def get_dashboard_stats():
             "total_records":    conn.execute("SELECT COUNT(*) FROM price_history").fetchone()[0],
             "alltime_low_cnt":  alltime_low_cnt,
             "last_scrape":      conn.execute("SELECT MAX(scraped_at) FROM price_history").fetchone()[0],
+            "flash_sale_cnt":   conn.execute("SELECT COUNT(DISTINCT item_id) FROM flash_sales").fetchone()[0],
+            "campaign_cnt":     conn.execute("SELECT COUNT(*) FROM campaigns").fetchone()[0],
         }
+
+# ── Campaigns ─────────────────────────────────────────────────────────────────
+
+def upsert_campaign(slug, name, section="campaign", badge=None, url=None):
+    with get_conn() as conn:
+        conn.execute("""
+            INSERT INTO campaigns(slug,name,section,badge,url,first_seen,last_seen)
+            VALUES(?,?,?,?,?,CURRENT_TIMESTAMP,CURRENT_TIMESTAMP)
+            ON CONFLICT(slug) DO UPDATE SET
+                name=excluded.name, section=excluded.section,
+                badge=excluded.badge, url=excluded.url, last_seen=CURRENT_TIMESTAMP
+        """, (slug, name, section, badge, url))
+        return conn.execute("SELECT id FROM campaigns WHERE slug=?", (slug,)).fetchone()[0]
+
+def get_campaigns(section=None):
+    with get_conn() as conn:
+        sql = "SELECT * FROM campaigns"
+        params = []
+        if section:
+            sql += " WHERE section=?"
+            params.append(section)
+        sql += " ORDER BY section, name"
+        return [dict(r) for r in conn.execute(sql, params).fetchall()]
+
+# ── Flash Sales ───────────────────────────────────────────────────────────────
+
+def save_flash_sale(item_id, name=None, image=None, url=None,
+                    price=None, original=None, discount=None, sold=None):
+    with get_conn() as conn:
+        conn.execute("""
+            INSERT INTO flash_sales(item_id,name,image,url,price,original,discount,sold)
+            VALUES(?,?,?,?,?,?,?,?)
+        """, (item_id, name, image, url, price, original, discount, sold))
+
+def get_flash_sales(limit=100):
+    with get_conn() as conn:
+        rows = conn.execute("""
+            SELECT * FROM flash_sales
+            WHERE id IN (SELECT MAX(id) FROM flash_sales GROUP BY item_id)
+            ORDER BY scraped_at DESC, discount DESC
+            LIMIT ?
+        """, (limit,)).fetchall()
+        return [dict(r) for r in rows]
+
+# ── Analytics ─────────────────────────────────────────────────────────────────
+
+def get_price_drops(limit=50, min_pct=1.0):
+    """Products whose current price is below their recent peak — biggest drops."""
+    with get_conn() as conn:
+        rows = conn.execute("""
+            SELECT p.item_id, p.name, p.brand, p.image, p.unit, p.unit_qty,
+                   c.name AS category_name,
+                   cur.price AS current_price,
+                   stats.min_price, stats.max_price,
+                   ROUND((stats.max_price - cur.price) / stats.max_price * 100.0, 1) AS drop_pct
+            FROM products p
+            JOIN (
+                SELECT product_id, price FROM price_history
+                WHERE id IN (SELECT MAX(id) FROM price_history GROUP BY product_id)
+            ) cur ON cur.product_id = p.id
+            JOIN (
+                SELECT product_id, MIN(price) AS min_price, MAX(price) AS max_price
+                FROM price_history GROUP BY product_id
+            ) stats ON stats.product_id = p.id
+            LEFT JOIN categories c ON c.id = p.category_id
+            WHERE stats.max_price > 0
+              AND (stats.max_price - cur.price) / stats.max_price * 100.0 >= ?
+            ORDER BY drop_pct DESC
+            LIMIT ?
+        """, (min_pct, limit)).fetchall()
+        return [dict(r) for r in rows]
+
+def get_top_discounts(limit=50):
+    """Products currently carrying the largest active discount."""
+    with get_conn() as conn:
+        rows = conn.execute("""
+            SELECT p.item_id, p.name, p.brand, p.image,
+                   c.name AS category_name,
+                   ph.price, ph.original, ph.discount
+            FROM products p
+            JOIN (
+                SELECT product_id, price, original, discount FROM price_history
+                WHERE id IN (SELECT MAX(id) FROM price_history GROUP BY product_id)
+            ) ph ON ph.product_id = p.id
+            LEFT JOIN categories c ON c.id = p.category_id
+            WHERE ph.discount IS NOT NULL AND ph.discount > 0
+            ORDER BY ph.discount DESC
+            LIMIT ?
+        """, (limit,)).fetchall()
+        return [dict(r) for r in rows]
+
+def get_top_sellers(limit=50):
+    """Most-sold products in the catalog."""
+    with get_conn() as conn:
+        rows = conn.execute("""
+            SELECT p.item_id, p.name, p.brand, p.image,
+                   c.name AS category_name,
+                   ph.price, ph.rating, ph.review_cnt, ph.sold_cnt
+            FROM products p
+            JOIN (
+                SELECT product_id, price, rating, review_cnt, sold_cnt FROM price_history
+                WHERE id IN (SELECT MAX(id) FROM price_history GROUP BY product_id)
+            ) ph ON ph.product_id = p.id
+            LEFT JOIN categories c ON c.id = p.category_id
+            WHERE ph.sold_cnt IS NOT NULL
+            ORDER BY ph.sold_cnt DESC
+            LIMIT ?
+        """, (limit,)).fetchall()
+        return [dict(r) for r in rows]
+
+def get_category_distribution():
+    """Product count per category for dashboard charts."""
+    with get_conn() as conn:
+        rows = conn.execute("""
+            SELECT c.name, COUNT(p.id) AS cnt
+            FROM categories c
+            LEFT JOIN products p ON p.category_id = c.id
+            GROUP BY c.id
+            HAVING cnt > 0
+            ORDER BY cnt DESC
+        """).fetchall()
+        return [dict(r) for r in rows]
+
+def get_discount_distribution():
+    """Histogram of active discounts for charts."""
+    with get_conn() as conn:
+        rows = conn.execute("""
+            SELECT
+                SUM(CASE WHEN discount < 10 THEN 1 ELSE 0 END) AS d0_10,
+                SUM(CASE WHEN discount >= 10 AND discount < 25 THEN 1 ELSE 0 END) AS d10_25,
+                SUM(CASE WHEN discount >= 25 AND discount < 50 THEN 1 ELSE 0 END) AS d25_50,
+                SUM(CASE WHEN discount >= 50 AND discount < 75 THEN 1 ELSE 0 END) AS d50_75,
+                SUM(CASE WHEN discount >= 75 THEN 1 ELSE 0 END) AS d75_100
+            FROM price_history
+            WHERE id IN (SELECT MAX(id) FROM price_history GROUP BY product_id)
+              AND discount IS NOT NULL
+        """).fetchone()
+        return dict(rows) if rows else {}
+
+def get_price_change_leaders(days=7, limit=50):
+    """Price movers over the last N days (absolute change, up or down)."""
+    with get_conn() as conn:
+        rows = conn.execute("""
+            WITH latest AS (
+                SELECT product_id, price, scraped_at FROM price_history
+                WHERE id IN (SELECT MAX(id) FROM price_history GROUP BY product_id)
+            ),
+            earliest AS (
+                SELECT product_id, price FROM price_history
+                WHERE scraped_at <= datetime('now', ?)
+                  AND id IN (SELECT MIN(id) FROM price_history WHERE scraped_at <= datetime('now', ?) GROUP BY product_id)
+            )
+            SELECT p.item_id, p.name, p.brand, p.image, c.name AS category_name,
+                   l.price AS current_price, e.price AS old_price,
+                   ROUND((l.price - e.price) / e.price * 100.0, 1) AS change_pct
+            FROM products p
+            JOIN latest l ON l.product_id = p.id
+            JOIN earliest e ON e.product_id = p.id
+            LEFT JOIN categories c ON c.id = p.category_id
+            WHERE e.price > 0
+            ORDER BY change_pct DESC
+            LIMIT ?
+        """, (f"-{days} days", f"-{days} days", limit)).fetchall()
+        return [dict(r) for r in rows]
 
 if __name__ == "__main__":
     init_db()

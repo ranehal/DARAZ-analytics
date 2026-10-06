@@ -3,347 +3,355 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>DarazPulse — Real-Time E-Commerce Price History & Unit Intelligence</title>
+  <title>DarazPulse — Real-Time E-Commerce Price Intelligence</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600;700&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     :root {
-      --bg-dark: #080c14;
-      --bg-card: rgba(18, 24, 38, 0.75);
-      --bg-card-hover: rgba(28, 36, 56, 0.9);
-      --border-color: rgba(255, 255, 255, 0.08);
-      --accent-orange: #ff6b00;
-      --accent-gradient: linear-gradient(135deg, #ff6b00 0%, #ff8800 50%, #ff3b00 100%);
-      --accent-cyan: #00f2fe;
+      --bg: #070b12;
+      --bg-2: #0b111d;
+      --card: rgba(17, 24, 39, 0.72);
+      --card-hover: rgba(26, 34, 52, 0.92);
+      --border: rgba(255, 255, 255, 0.07);
+      --border-strong: rgba(255, 255, 255, 0.12);
+      --orange: #ff6b00;
+      --grad: linear-gradient(135deg, #ff6b00 0%, #ff8800 50%, #ff3b00 100%);
+      --cyan: #00f2fe;
       --green: #10b981;
       --red: #ef4444;
-      --text-main: #f3f4f6;
-      --text-muted: #9ca3af;
-      --glass-blur: blur(14px);
+      --yellow: #f59e0b;
+      --text: #eef2f7;
+      --muted: #93a0b4;
+      --blur: blur(16px);
+      --radius: 14px;
+      --shadow: 0 10px 32px rgba(0, 0, 0, 0.45);
+      --mono: 'JetBrains Mono', monospace;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
-
+    html { scroll-behavior: smooth; }
     body {
-      font-family: 'Plus Jakarta Sans', sans-serif;
-      background-color: var(--bg-dark);
-      color: var(--text-main);
-      min-height: 100vh; overflow-x: hidden;
-      background-image: 
-        radial-gradient(circle at 15% 15%, rgba(255, 107, 0, 0.06) 0%, transparent 40%),
-        radial-gradient(circle at 85% 85%, rgba(0, 242, 254, 0.04) 0%, transparent 40%);
+      font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+      background: var(--bg); color: var(--text); min-height: 100vh;
+      overflow-x: hidden;
+      background-image:
+        radial-gradient(circle at 12% 8%, rgba(255,107,0,0.08) 0%, transparent 42%),
+        radial-gradient(circle at 88% 90%, rgba(0,242,254,0.06) 0%, transparent 42%),
+        radial-gradient(circle at 50% 50%, rgba(255,255,255,0.015) 0%, transparent 60%);
     }
+    ::-webkit-scrollbar { width: 10px; height: 10px; }
+    ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.12); border-radius: 8px; }
+    ::-webkit-scrollbar-thumb:hover { background: rgba(255,107,0,0.4); }
+
+    a { color: inherit; text-decoration: none; }
 
     header {
-      position: sticky; top: 0; z-index: 100;
-      background: rgba(8, 12, 20, 0.9);
-      backdrop-filter: var(--glass-blur);
-      border-bottom: 1px solid var(--border-color);
-      padding: 0.8rem 2rem;
-      display: flex; justify-content: space-between; align-items: center;
+      position: sticky; top: 0; z-index: 200;
+      background: rgba(7, 11, 18, 0.82); backdrop-filter: var(--blur);
+      border-bottom: 1px solid var(--border); padding: 0.75rem 1.6rem;
+      display: flex; align-items: center; justify-content: space-between; gap: 1rem;
     }
-
-    .brand {
-      display: flex; align-items: center; gap: 0.6rem;
-      font-size: 1.3rem; font-weight: 800;
-      background: var(--accent-gradient);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
-    }
-
+    .brand { display: flex; align-items: center; gap: 0.65rem; font-weight: 800; font-size: 1.3rem; }
     .brand-logo {
-      width: 32px; height: 32px;
-      background: var(--accent-gradient);
-      border-radius: 8px; display: grid; place-items: center;
-      color: #fff; -webkit-text-fill-color: #fff; font-size: 1rem;
-      box-shadow: 0 4px 12px rgba(255, 107, 0, 0.4);
+      width: 34px; height: 34px; border-radius: 9px; background: var(--grad);
+      display: grid; place-items: center; color: #fff; font-size: 1.05rem;
+      box-shadow: 0 4px 16px rgba(255,107,0,0.45);
     }
-
+    .brand-name { background: var(--grad); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
     .live-badge {
-      background: rgba(16, 185, 129, 0.15); border: 1px solid var(--green);
-      color: var(--green); font-size: 0.7rem; font-weight: 700;
-      padding: 0.25rem 0.6rem; border-radius: 20px; text-transform: uppercase;
-      letter-spacing: 0.5px; margin-left: 0.5rem; -webkit-text-fill-color: initial;
+      background: rgba(16,185,129,0.14); border: 1px solid var(--green); color: var(--green);
+      font-size: 0.66rem; font-weight: 700; padding: 0.22rem 0.55rem; border-radius: 20px;
+      text-transform: uppercase; letter-spacing: 0.6px; white-space: nowrap;
     }
-
-    .search-box {
-      position: relative; width: 440px;
-    }
-
+    .search-box { position: relative; flex: 1; max-width: 460px; }
     .search-box input {
-      width: 100%; padding: 0.55rem 1.2rem 0.55rem 2.6rem;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid var(--border-color);
-      border-radius: 10px; color: #fff; font-size: 0.9rem;
-      transition: all 0.2s ease;
+      width: 100%; padding: 0.58rem 1rem 0.58rem 2.6rem;
+      background: rgba(255,255,255,0.05); border: 1px solid var(--border); border-radius: 10px;
+      color: #fff; font-size: 0.9rem; transition: all 0.2s;
     }
-
-    .search-box input:focus {
-      outline: none; border-color: var(--accent-orange);
-      box-shadow: 0 0 16px rgba(255, 107, 0, 0.25);
-    }
-
-    .search-box span {
-      position: absolute; left: 0.85rem; top: 50%; transform: translateY(-50%);
-      color: var(--text-muted); font-size: 0.9rem;
-    }
-
-    .header-actions { display: flex; gap: 0.75rem; align-items: center; }
+    .search-box input:focus { outline: none; border-color: var(--orange); box-shadow: 0 0 0 3px rgba(255,107,0,0.15); }
+    .search-box .s-ico { position: absolute; left: 0.9rem; top: 50%; transform: translateY(-50%); color: var(--muted); }
+    .header-actions { display: flex; gap: 0.6rem; align-items: center; }
 
     .btn {
-      padding: 0.55rem 1.1rem; border-radius: 8px; font-weight: 600;
-      font-size: 0.85rem; cursor: pointer; border: none; transition: all 0.2s ease;
-      display: flex; align-items: center; gap: 0.4rem;
+      padding: 0.55rem 1rem; border-radius: 9px; font-weight: 600; font-size: 0.82rem;
+      cursor: pointer; border: 1px solid var(--border); background: rgba(255,255,255,0.05);
+      color: var(--text); transition: all 0.18s; display: inline-flex; align-items: center; gap: 0.4rem;
+      white-space: nowrap;
     }
+    .btn:hover { border-color: var(--border-strong); background: rgba(255,255,255,0.09); }
+    .btn-primary { background: var(--grad); color: #fff; border: none; box-shadow: 0 3px 14px rgba(255,107,0,0.35); }
+    .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(255,107,0,0.5); background: var(--grad); }
+    .btn.active { border-color: var(--orange); color: var(--orange); background: rgba(255,107,0,0.12); }
+    .btn:disabled { opacity: 0.6; cursor: not-allowed; }
 
-    .btn-primary {
-      background: var(--accent-gradient); color: #fff;
-      box-shadow: 0 3px 12px rgba(255, 107, 0, 0.3);
-    }
-    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 5px 16px rgba(255, 107, 0, 0.5); }
-
-    .btn-filter {
-      background: rgba(255, 255, 255, 0.06); border: 1px solid var(--border-color);
-      color: var(--text-main);
-    }
-    .btn-filter.active, .btn-filter:hover {
-      background: rgba(255, 107, 0, 0.15); border-color: var(--accent-orange);
-      color: var(--accent-orange);
-    }
-
-    .container {
-      display: grid; grid-template-columns: 270px 1fr;
-      min-height: calc(100vh - 61px);
-    }
-
+    .layout { display: grid; grid-template-columns: 264px 1fr; min-height: calc(100vh - 61px); }
     aside {
-      background: rgba(12, 17, 28, 0.7);
-      border-right: 1px solid var(--border-color);
-      padding: 1.25rem 0.85rem; display: flex; flex-direction: column; gap: 0.4rem;
-      overflow-y: auto; max-height: calc(100vh - 61px);
+      background: rgba(9, 14, 24, 0.75); border-right: 1px solid var(--border);
+      padding: 1rem 0.8rem; overflow-y: auto; display: flex; flex-direction: column; gap: 1.2rem;
+      position: sticky; top: 61px; height: calc(100vh - 61px);
     }
-
-    .sidebar-title {
-      font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1.5px;
-      color: var(--text-muted); margin-bottom: 0.5rem; padding-left: 0.5rem; font-weight: 700;
+    .nav-group { display: flex; flex-direction: column; gap: 0.22rem; }
+    .nav-label { font-size: 0.66rem; text-transform: uppercase; letter-spacing: 1.4px; color: var(--muted); font-weight: 700; padding: 0 0.55rem 0.45rem; }
+    .nav-item {
+      padding: 0.5rem 0.7rem; border-radius: 8px; cursor: pointer; color: var(--muted);
+      font-size: 0.84rem; font-weight: 600; display: flex; align-items: center; gap: 0.5rem;
+      transition: all 0.16s; user-select: none; border-left: 2px solid transparent;
     }
-
-    .cat-group { display: flex; flex-direction: column; gap: 0.2rem; }
-
-    .cat-item {
-      padding: 0.55rem 0.75rem; border-radius: 8px; color: var(--text-muted);
-      cursor: pointer; font-size: 0.85rem; font-weight: 600;
-      display: flex; align-items: center; justify-content: space-between;
-      transition: all 0.2s ease; user-select: none;
+    .nav-item:hover { background: rgba(255,255,255,0.05); color: var(--text); }
+    .nav-item.active { background: rgba(255,107,0,0.12); color: var(--orange); border-left-color: var(--orange); }
+    .nav-item .count {
+      margin-left: auto; background: rgba(255,255,255,0.07); padding: 0.1rem 0.4rem;
+      border-radius: 10px; font-size: 0.68rem; font-family: var(--mono); color: var(--muted);
     }
-
-    .cat-item:hover, .cat-item.active {
-      background: rgba(255, 107, 0, 0.12); color: var(--accent-orange);
-    }
-
-    .cat-num {
-      background: rgba(255, 255, 255, 0.08); padding: 0.15rem 0.45rem;
-      border-radius: 12px; font-size: 0.72rem; color: var(--text-muted);
-      font-family: 'JetBrains Mono', monospace;
-    }
-
-    .cat-item.active .cat-num {
-      background: rgba(255, 107, 0, 0.25); color: var(--accent-orange);
-    }
-
-    .sub-tree {
-      padding-left: 0.85rem; display: flex; flex-direction: column; gap: 0.15rem;
-      border-left: 1px dashed rgba(255,255,255,0.1); margin-left: 0.75rem;
-    }
-
+    .cat-item { padding: 0.42rem 0.6rem; border-radius: 7px; cursor: pointer; color: var(--muted); font-size: 0.8rem; font-weight: 500; display: flex; align-items: center; justify-content: space-between; transition: all 0.15s; }
+    .cat-item:hover, .cat-item.active { background: rgba(255,107,0,0.12); color: var(--orange); }
+    .cat-num { font-size: 0.66rem; font-family: var(--mono); background: rgba(255,255,255,0.07); padding: 0.1rem 0.4rem; border-radius: 9px; }
+    .sub-tree { margin-left: 0.7rem; padding-left: 0.7rem; border-left: 1px dashed rgba(255,255,255,0.1); display: flex; flex-direction: column; gap: 0.12rem; }
     .sub-tree.collapsed { display: none; }
 
-    main { padding: 1.5rem 1.75rem; overflow-y: auto; }
+    main { padding: 1.4rem 1.6rem; overflow-y: auto; }
 
-    .stats-ribbon {
-      display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem;
-      margin-bottom: 1.5rem;
-    }
+    .view { display: none; }
+    .view.active { display: block; animation: fade 0.25s ease; }
+    @keyframes fade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
 
+    .stats-ribbon { display: grid; grid-template-columns: repeat(6, 1fr); gap: 0.85rem; margin-bottom: 1.4rem; }
     .stat-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border-color);
-      border-radius: 14px; padding: 1rem 1.2rem;
-      backdrop-filter: var(--glass-blur);
+      background: var(--card); border: 1px solid var(--border); border-radius: var(--radius);
+      padding: 1rem 1.1rem; backdrop-filter: var(--blur); position: relative; overflow: hidden;
     }
+    .stat-card::after { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: var(--grad); opacity: 0.7; }
+    .stat-icon { font-size: 1.15rem; }
+    .stat-label { font-size: 0.72rem; color: var(--muted); font-weight: 500; margin-top: 0.35rem; }
+    .stat-value { font-size: 1.55rem; font-weight: 800; color: #fff; font-family: var(--mono); margin-top: 0.1rem; }
 
-    .stat-label { font-size: 0.78rem; color: var(--text-muted); font-weight: 500; }
-    .stat-value { font-size: 1.5rem; font-weight: 800; margin-top: 0.2rem; color: #fff; }
+    .section-head { display: flex; align-items: center; justify-content: space-between; margin: 0.4rem 0 1rem; }
+    .section-title { font-size: 1.15rem; font-weight: 800; display: flex; align-items: center; gap: 0.5rem; }
+    .section-sub { font-size: 0.78rem; color: var(--muted); }
 
-    .products-header {
-      display: flex; justify-content: space-between; align-items: center;
-      margin-bottom: 1.2rem;
+    .h-scroll { display: flex; gap: 0.9rem; overflow-x: auto; padding-bottom: 0.5rem; }
+    .h-scroll::-webkit-scrollbar { height: 6px; }
+
+    .flash-card {
+      min-width: 220px; max-width: 220px; background: var(--card); border: 1px solid var(--border);
+      border-radius: var(--radius); overflow: hidden; cursor: pointer; transition: all 0.22s; flex-shrink: 0;
     }
+    .flash-card:hover { transform: translateY(-4px); border-color: rgba(255,107,0,0.45); box-shadow: var(--shadow); background: var(--card-hover); }
+    .flash-img { width: 100%; height: 150px; background: rgba(255,255,255,0.02); display: flex; align-items: center; justify-content: center; padding: 0.5rem; position: relative; }
+    .flash-img img { max-width: 88%; max-height: 88%; object-fit: contain; }
+    .disc-badge { position: absolute; top: 8px; right: 8px; background: var(--grad); color: #fff; font-weight: 800; font-size: 0.72rem; padding: 0.22rem 0.5rem; border-radius: 8px; }
+    .flash-body { padding: 0.75rem; }
+    .flash-title { font-size: 0.8rem; font-weight: 600; line-height: 1.35; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; min-height: 2.6em; }
+    .flash-price { font-size: 1.1rem; font-weight: 800; color: var(--orange); margin-top: 0.4rem; }
+    .flash-orig { font-size: 0.72rem; color: var(--muted); text-decoration: line-through; margin-left: 0.35rem; }
 
-    .products-grid {
-      display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      gap: 1rem;
+    .camp-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 0.85rem; }
+    .camp-card {
+      background: var(--card); border: 1px solid var(--border); border-radius: var(--radius);
+      padding: 1rem; cursor: pointer; transition: all 0.2s; display: flex; flex-direction: column; gap: 0.4rem;
     }
+    .camp-card:hover { border-color: rgba(0,242,254,0.4); transform: translateY(-3px); background: var(--card-hover); box-shadow: var(--shadow); }
+    .camp-badge { font-size: 1.5rem; }
+    .camp-name { font-weight: 700; font-size: 0.9rem; }
+    .camp-section { font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.5px; color: var(--cyan); font-weight: 700; }
 
+    .rank-list { display: flex; flex-direction: column; gap: 0.55rem; }
+    .rank-item {
+      display: flex; align-items: center; gap: 0.85rem; background: var(--card);
+      border: 1px solid var(--border); border-radius: 12px; padding: 0.65rem 0.85rem; cursor: pointer; transition: all 0.18s;
+    }
+    .rank-item:hover { border-color: var(--border-strong); background: var(--card-hover); }
+    .rank-pos { font-family: var(--mono); font-weight: 700; color: var(--orange); width: 26px; text-align: center; font-size: 0.9rem; }
+    .rank-img { width: 44px; height: 44px; border-radius: 8px; background: rgba(255,255,255,0.03); display: flex; align-items: center; justify-content: center; overflow: hidden; flex-shrink: 0; }
+    .rank-img img { max-width: 100%; max-height: 100%; object-fit: contain; }
+    .rank-info { flex: 1; min-width: 0; }
+    .rank-name { font-size: 0.84rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .rank-meta { font-size: 0.72rem; color: var(--muted); margin-top: 0.15rem; }
+    .rank-val { text-align: right; flex-shrink: 0; }
+    .rank-val .big { font-size: 1rem; font-weight: 800; }
+    .up { color: var(--red); }
+    .down { color: var(--green); }
+
+    .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(196px, 1fr)); gap: 0.95rem; }
     .product-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border-color);
-      border-radius: 14px; overflow: hidden;
-      transition: all 0.25s ease; cursor: pointer;
-      display: flex; flex-direction: column;
-      position: relative;
+      background: var(--card); border: 1px solid var(--border); border-radius: var(--radius);
+      overflow: hidden; cursor: pointer; transition: all 0.22s; display: flex; flex-direction: column; position: relative;
     }
-
-    .product-card:hover {
-      transform: translateY(-4px);
-      border-color: rgba(255, 107, 0, 0.4);
-      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.45);
-      background: var(--bg-card-hover);
-    }
-
-    .img-container {
-      width: 100%; height: 140px; background: rgba(255, 255, 255, 0.02);
-      position: relative; display: flex; align-items: center; justify-content: center;
-      overflow: hidden; padding: 0.5rem;
-    }
-
-    .img-container img {
-      max-width: 90%; max-height: 90%; object-fit: contain;
-      transition: transform 0.3s ease;
-    }
-
+    .product-card:hover { transform: translateY(-4px); border-color: rgba(255,107,0,0.4); box-shadow: var(--shadow); background: var(--card-hover); }
+    .img-container { width: 100%; height: 140px; background: rgba(255,255,255,0.02); display: flex; align-items: center; justify-content: center; overflow: hidden; padding: 0.5rem; position: relative; }
+    .img-container img { max-width: 90%; max-height: 90%; object-fit: contain; transition: transform 0.3s; }
     .product-card:hover .img-container img { transform: scale(1.06); }
+    .badge-unit { position: absolute; top: 6px; right: 6px; background: rgba(0,242,254,0.14); border: 1px solid var(--cyan); color: var(--cyan); font-size: 0.66rem; font-weight: 700; padding: 0.18rem 0.42rem; border-radius: 10px; }
+    .badge-low { position: absolute; top: 6px; left: 6px; background: rgba(16,185,129,0.2); border: 1px solid var(--green); color: var(--green); font-size: 0.62rem; font-weight: 800; padding: 0.18rem 0.42rem; border-radius: 10px; text-transform: uppercase; letter-spacing: 0.5px; }
+    .prod-body { padding: 0.8rem; flex: 1; display: flex; flex-direction: column; justify-content: space-between; }
+    .prod-title { font-size: 0.82rem; font-weight: 600; line-height: 1.35; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; margin-bottom: 0.55rem; min-height: 2.2em; }
+    .prod-brand { font-size: 0.68rem; color: var(--muted); margin-bottom: 0.35rem; }
+    .prod-meta { display: flex; align-items: baseline; gap: 0.4rem; flex-wrap: wrap; }
+    .prod-price { font-size: 1.12rem; font-weight: 800; color: var(--orange); }
+    .prod-orig { font-size: 0.72rem; color: var(--muted); text-decoration: line-through; }
+    .prod-unit { font-family: var(--mono); font-size: 0.7rem; color: var(--cyan); margin-top: 0.3rem; font-weight: 600; }
 
-    .badge-unit {
-      position: absolute; top: 6px; right: 6px;
-      background: rgba(0, 242, 254, 0.15); border: 1px solid var(--accent-cyan);
-      color: var(--accent-cyan); font-size: 0.68rem; font-weight: 700;
-      padding: 0.2rem 0.45rem; border-radius: 12px; backdrop-filter: var(--glass-blur);
+    .filters-bar { display: flex; gap: 0.6rem; align-items: center; flex-wrap: wrap; margin-bottom: 1rem; }
+    .select-box {
+      background: rgba(255,255,255,0.05); border: 1px solid var(--border); color: var(--text);
+      border-radius: 9px; padding: 0.5rem 0.8rem; font-size: 0.82rem; cursor: pointer;
     }
+    .select-box:focus { outline: none; border-color: var(--orange); }
+    .select-box option { background: #111827; }
 
-    .badge-low {
-      position: absolute; top: 6px; left: 6px;
-      background: rgba(16, 185, 129, 0.2); border: 1px solid var(--green);
-      color: var(--green); font-size: 0.65rem; font-weight: 800;
-      padding: 0.2rem 0.45rem; border-radius: 12px; text-transform: uppercase;
-    }
+    .charts-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .chart-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.1rem; }
+    .chart-card canvas { max-height: 300px; }
+    .chart-title { font-size: 0.9rem; font-weight: 700; margin-bottom: 0.8rem; }
 
-    .prod-body { padding: 0.85rem; flex: 1; display: flex; flex-direction: column; justify-content: space-between; }
+    .empty { text-align: center; padding: 3rem; color: var(--muted); grid-column: 1 / -1; }
 
-    .prod-title {
-      font-size: 0.85rem; font-weight: 600; color: #fff;
-      line-height: 1.35; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
-      overflow: hidden; margin-bottom: 0.6rem; min-height: 2.3em;
-    }
-
-    .prod-meta { display: flex; justify-content: space-between; align-items: baseline; }
-
-    .prod-price { font-size: 1.15rem; font-weight: 800; color: var(--accent-orange); }
-
-    .prod-orig { font-size: 0.75rem; color: var(--text-muted); text-decoration: line-through; margin-left: 0.3rem; }
-
-    .prod-unit-price {
-      font-family: 'JetBrains Mono', monospace; font-size: 0.72rem;
-      color: var(--accent-cyan); margin-top: 0.3rem; font-weight: 600;
-    }
-
-    .modal-overlay {
-      position: fixed; inset: 0; background: rgba(0, 0, 0, 0.88);
-      backdrop-filter: blur(12px); z-index: 1000;
-      display: flex; align-items: center; justify-content: center;
-      opacity: 0; pointer-events: none; transition: opacity 0.25s ease;
-      padding: 1.5rem;
-    }
-
+    .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.88); backdrop-filter: blur(12px); z-index: 1000; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: opacity 0.25s; padding: 1.5rem; }
     .modal-overlay.active { opacity: 1; pointer-events: auto; }
+    .modal-content { background: #0e1522; border: 1px solid var(--border); border-radius: 20px; width: 96vw; max-width: 900px; max-height: 92vh; display: flex; flex-direction: column; padding: 1.4rem 1.6rem; box-shadow: 0 25px 60px rgba(0,0,0,0.8); overflow: auto; }
+    .modal-header { display: flex; justify-content: space-between; align-items: flex-start; gap: 1rem; margin-bottom: 0.8rem; }
+    .modal-title { font-size: 1.2rem; font-weight: 800; line-height: 1.35; }
+    .modal-sub { font-size: 0.78rem; color: var(--muted); margin-top: 0.3rem; }
+    .close-btn { background: rgba(255,255,255,0.08); border: none; color: #fff; width: 34px; height: 34px; border-radius: 50%; cursor: pointer; font-size: 1rem; display: grid; place-items: center; transition: all 0.2s; flex-shrink: 0; }
+    .close-btn:hover { background: rgba(255,59,0,0.4); }
+    .chart-container { position: relative; width: 100%; min-height: 260px; }
+    .modal-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.7rem; margin-top: 1rem; }
+    .m-stat-box { text-align: center; background: rgba(255,255,255,0.03); padding: 0.7rem; border-radius: 10px; }
+    .m-stat-val { font-size: 1.1rem; font-weight: 800; color: var(--orange); font-family: var(--mono); }
+    .m-stat-lbl { font-size: 0.68rem; color: var(--muted); margin-top: 0.2rem; }
+    .modal-link { display: inline-flex; align-items: center; gap: 0.4rem; margin-top: 1rem; color: var(--cyan); font-size: 0.82rem; font-weight: 600; }
+    .modal-link:hover { text-decoration: underline; }
 
-    .modal-content {
-      background: #0f1523; border: 1px solid var(--border-color);
-      border-radius: 20px; width: 95vw; height: 90vh;
-      display: flex; flex-direction: column; padding: 1.5rem 1.75rem;
-      box-shadow: 0 25px 60px rgba(0,0,0,0.8); position: relative;
+    @media (max-width: 1100px) { .stats-ribbon { grid-template-columns: repeat(3, 1fr); } }
+    @media (max-width: 820px) {
+      .layout { grid-template-columns: 1fr; }
+      aside { display: none; }
+      .stats-ribbon { grid-template-columns: repeat(2, 1fr); }
+      .charts-grid { grid-template-columns: 1fr; }
+      .search-box { display: none; }
     }
 
-    .modal-header {
-      display: flex; justify-content: space-between; align-items: center;
-      margin-bottom: 1rem;
-    }
-
-    .modal-title { font-size: 1.25rem; font-weight: 800; color: #fff; }
-
-    .close-btn {
-      background: rgba(255,255,255,0.08); border: none; color: #fff;
-      width: 34px; height: 34px; border-radius: 50%; cursor: pointer;
-      font-size: 1.1rem; display: grid; place-items: center; transition: all 0.2s;
-    }
-    .close-btn:hover { background: rgba(255, 59, 0, 0.4); }
-
-    .chart-container { flex: 1; position: relative; width: 100%; min-height: 0; }
-
-    .modal-stats {
-      display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.85rem;
-      margin-top: 1rem; background: rgba(255,255,255,0.03); padding: 0.85rem; border-radius: 12px;
-    }
-
-    .m-stat-box { text-align: center; }
-    .m-stat-val { font-size: 1.15rem; font-weight: 800; color: var(--accent-orange); }
-    .m-stat-lbl { font-size: 0.72rem; color: var(--text-muted); margin-top: 0.15rem; }
+    .toast { position: fixed; bottom: 1.5rem; right: 1.5rem; background: #111827; border: 1px solid var(--green); color: var(--green); padding: 0.8rem 1.2rem; border-radius: 10px; font-weight: 600; z-index: 2000; box-shadow: var(--shadow); animation: fade 0.3s; }
   </style>
 </head>
 <body>
-
   <header>
     <div class="brand">
-      <div class="brand-logo">📊</div>
-      <span>DarazPulse</span>
-      <span class="live-badge">⚡ Live API Scraper</span>
+      <div class="brand-logo">⚡</div>
+      <span class="brand-name">DarazPulse</span>
+      <span class="live-badge">Live API</span>
     </div>
     <div class="search-box">
-      <span>🔍</span>
-      <input type="text" id="searchInput" placeholder="Search products or categories...">
+      <span class="s-ico">🔍</span>
+      <input type="text" id="searchInput" placeholder="Search 15,000+ products, brands, categories...">
     </div>
     <div class="header-actions">
-      <button class="btn btn-filter" id="btnAlltimeLow">🔥 All-Time Lows</button>
+      <button class="btn" id="btnAlltimeLow">🔥 All-Time Lows</button>
+      <button class="btn" id="btnExport">⬇️ Export CSV</button>
       <button class="btn btn-primary" id="btnScrape">⚡ Live Scrape</button>
     </div>
   </header>
 
-  <div class="container">
+  <div class="layout">
     <aside>
-      <div class="sidebar-title">Categories</div>
-      <div class="cat-item active" data-cat="" onclick="selectCat(event, null)">
-        <span>🌐 All Categories</span>
-        <span class="cat-num" id="totalCountBadge">0</span>
+      <div class="nav-group">
+        <div class="nav-label">Explore</div>
+        <div class="nav-item active" data-view="overview" onclick="switchView('overview')"><span>🏠</span> Overview</div>
+        <div class="nav-item" data-view="flash" onclick="switchView('flash')"><span>⚡</span> Flash Sales</div>
+        <div class="nav-item" data-view="fests" onclick="switchView('fests')"><span>🎉</span> Fests &amp; Campaigns</div>
+        <div class="nav-item" data-view="deals" onclick="switchView('deals')"><span>📉</span> Deals &amp; Drops</div>
+        <div class="nav-item" data-view="analytics" onclick="switchView('analytics')"><span>📊</span> Analytics</div>
+        <div class="nav-item" data-view="products" onclick="switchView('products')"><span>🛒</span> All Products</div>
       </div>
-      <div id="categoryTree"></div>
+      <div class="nav-group">
+        <div class="nav-label">Categories</div>
+        <div class="cat-item active" data-cat="" onclick="selectCat(event, null)">
+          <span>🌐 All Categories</span><span class="cat-num" id="totalCountBadge">0</span>
+        </div>
+        <div id="categoryTree"></div>
+      </div>
     </aside>
 
     <main>
       <div class="stats-ribbon">
-        <div class="stat-card">
-          <div class="stat-label">Total Tracked Items</div>
-          <div class="stat-value" id="statProducts">0</div>
+        <div class="stat-card"><div class="stat-icon">🛒</div><div class="stat-value" id="statProducts">0</div><div class="stat-label">Tracked Items</div></div>
+        <div class="stat-card"><div class="stat-icon">🗂️</div><div class="stat-value" id="statCategories">0</div><div class="stat-label">Categories</div></div>
+        <div class="stat-card"><div class="stat-icon">📸</div><div class="stat-value" id="statRecords">0</div><div class="stat-label">Price Snapshots</div></div>
+        <div class="stat-card"><div class="stat-icon">🔥</div><div class="stat-value" id="statLowDeals" style="color:var(--green)">0</div><div class="stat-label">All-Time Lows</div></div>
+        <div class="stat-card"><div class="stat-icon">⚡</div><div class="stat-value" id="statFlash" style="color:var(--orange)">0</div><div class="stat-label">Flash Deals</div></div>
+        <div class="stat-card"><div class="stat-icon">🎉</div><div class="stat-value" id="statCamps" style="color:var(--cyan)">0</div><div class="stat-label">Active Sections</div></div>
+      </div>
+
+      <!-- Overview -->
+      <div class="view active" id="view-overview">
+        <div class="section-head">
+          <div class="section-title">⚡ Flash Sales <span class="section-sub">— live from Daraz homepage</span></div>
+          <button class="btn" onclick="switchView('flash')">View all →</button>
         </div>
-        <div class="stat-card">
-          <div class="stat-label">Total Categories</div>
-          <div class="stat-value" id="statCategories">0</div>
+        <div class="h-scroll" id="overviewFlash"></div>
+
+        <div class="section-head" style="margin-top:1.6rem">
+          <div class="section-title">🎉 Fests &amp; Campaigns</div>
+          <button class="btn" onclick="switchView('fests')">View all →</button>
         </div>
-        <div class="stat-card">
-          <div class="stat-label">Price Snapshots</div>
-          <div class="stat-value" id="statRecords">0</div>
+        <div class="camp-grid" id="overviewCamps"></div>
+
+        <div class="section-head" style="margin-top:1.6rem">
+          <div class="section-title">📉 Biggest Price Drops</div>
+          <button class="btn" onclick="switchView('deals')">View all →</button>
         </div>
-        <div class="stat-card">
-          <div class="stat-label">All-Time Low Deals</div>
-          <div class="stat-value" id="statLowDeals" style="color: var(--green)">0</div>
+        <div class="rank-list" id="overviewDrops"></div>
+      </div>
+
+      <!-- Flash Sales -->
+      <div class="view" id="view-flash">
+        <div class="section-head"><div class="section-title">⚡ Flash Sales</div></div>
+        <div class="products-grid" id="flashGrid"></div>
+      </div>
+
+      <!-- Fests & Campaigns -->
+      <div class="view" id="view-fests">
+        <div class="section-head"><div class="section-title">🎉 Fests, Campaigns &amp; Vouchers</div></div>
+        <div class="camp-grid" id="festGrid"></div>
+      </div>
+
+      <!-- Deals -->
+      <div class="view" id="view-deals">
+        <div class="filters-bar">
+          <button class="btn active" id="tabDrops" onclick="setDealTab('drops')">📉 Price Drops</button>
+          <button class="btn" id="tabDiscounts" onclick="setDealTab('discounts')">💸 Top Discounts</button>
+          <button class="btn" id="tabSellers" onclick="setDealTab('sellers')">🏆 Best Sellers</button>
+          <button class="btn" id="tabMovers" onclick="setDealTab('movers')">📈 7-Day Movers</button>
+        </div>
+        <div class="rank-list" id="dealsList"></div>
+      </div>
+
+      <!-- Analytics -->
+      <div class="view" id="view-analytics">
+        <div class="charts-grid">
+          <div class="chart-card"><div class="chart-title">🗂️ Category Distribution</div><canvas id="chartCategories"></canvas></div>
+          <div class="chart-card"><div class="chart-title">💸 Discount Distribution</div><canvas id="chartDiscounts"></canvas></div>
         </div>
       </div>
 
-      <div class="products-header">
-        <h2 style="font-size: 1.25rem; font-weight: 800;" id="gridTitle">All Tracked Products</h2>
+      <!-- All Products -->
+      <div class="view" id="view-products">
+        <div class="filters-bar">
+          <select class="select-box" id="sortSelect" onchange="loadProducts(currentCategory, searchValue())">
+            <option value="recent">Sort: Most Recent</option>
+            <option value="price_asc">Price: Low → High</option>
+            <option value="price_desc">Price: High → Low</option>
+            <option value="discount_desc">Discount: High → Low</option>
+            <option value="rating_desc">Rating: High → Low</option>
+          </select>
+          <button class="btn" id="btnAlltimeLow2" onclick="toggleLow()">🔥 All-Time Lows</button>
+          <span class="section-sub" id="productCount"></span>
+        </div>
+        <div class="products-grid" id="productsGrid"></div>
       </div>
-
-      <div class="products-grid" id="productsGrid"></div>
     </main>
   </div>
 
@@ -352,31 +360,18 @@
       <div class="modal-header">
         <div>
           <div class="modal-title" id="mProdName">Product Price History</div>
-          <div style="font-size: 0.8rem; color: var(--text-muted);" id="mProdSub">Historical price analytics • CamelCamelCamel style</div>
+          <div class="modal-sub" id="mProdSub">Historical price analytics</div>
         </div>
         <button class="close-btn" id="btnCloseModal">✕</button>
       </div>
-      <div class="chart-container">
-        <canvas id="priceChart"></canvas>
-      </div>
+      <div class="chart-container"><canvas id="priceChart"></canvas></div>
       <div class="modal-stats">
-        <div class="m-stat-box">
-          <div class="m-stat-val" id="mLowest">৳0</div>
-          <div class="m-stat-lbl">All-Time Low</div>
-        </div>
-        <div class="m-stat-box">
-          <div class="m-stat-val" id="mHighest">৳0</div>
-          <div class="m-stat-lbl">All-Time High</div>
-        </div>
-        <div class="m-stat-box">
-          <div class="m-stat-val" id="mAverage">৳0</div>
-          <div class="m-stat-lbl">Average Price</div>
-        </div>
-        <div class="m-stat-box">
-          <div class="m-stat-val" id="mUnitLowest" style="color: var(--accent-cyan)">৳0</div>
-          <div class="m-stat-lbl">Lowest Unit Price</div>
-        </div>
+        <div class="m-stat-box"><div class="m-stat-val" id="mLowest">৳0</div><div class="m-stat-lbl">All-Time Low</div></div>
+        <div class="m-stat-box"><div class="m-stat-val" id="mHighest">৳0</div><div class="m-stat-lbl">All-Time High</div></div>
+        <div class="m-stat-box"><div class="m-stat-val" id="mAverage">৳0</div><div class="m-stat-lbl">Average</div></div>
+        <div class="m-stat-box"><div class="m-stat-val" id="mUnitLowest" style="color:var(--cyan)">৳0</div><div class="m-stat-lbl">Lowest Unit Price</div></div>
       </div>
+      <a class="modal-link" id="mProductLink" href="#" target="_blank">Open on Daraz ↗</a>
     </div>
   </div>
 
@@ -384,260 +379,408 @@
     let currentCategory = null;
     let isAllTimeLow = false;
     let priceChart = null;
+    let catChart = null;
+    let discChart = null;
     let allProductsCache = null;
     let searchTimer = null;
+    let dealTab = 'drops';
+    let campaignsCache = null;
 
-    const GRID_LIMIT = 240;
+    const GRID_LIMIT = 400;
+
+    function fmt(n) { return (n ?? 0).toLocaleString('en-US'); }
+    function searchValue() { return document.getElementById('searchInput').value; }
 
     function dedupeByDate(rows) {
       const byDate = new Map();
-      for (const r of rows) {
-        const d = (r.scraped_at || "").split(" ")[0];
+      for (const r of rows || []) {
+        const d = (r.scraped_at || '').split(' ')[0];
         if (d) byDate.set(d, r);
       }
       return Array.from(byDate.values());
     }
 
     async function apiFetch(url, staticUrl) {
-      try {
-        const r = await fetch(url);
-        if (r.ok) return await r.json();
-      } catch(e) {}
+      try { const r = await fetch(url); if (r.ok) return await r.json(); } catch(e) {}
       if (staticUrl) {
-        const r2 = await fetch(staticUrl);
-        if (r2.ok) return await r2.json();
+        try { const r2 = await fetch(staticUrl); if (r2.ok) return await r2.json(); } catch(e) {}
       }
       return null;
     }
 
-    document.addEventListener("DOMContentLoaded", () => {
-      loadStats();
-      loadCategories();
-      loadProducts();
-
-      document.getElementById("searchInput").addEventListener("input", (e) => {
-        clearTimeout(searchTimer);
-        searchTimer = setTimeout(() => loadProducts(currentCategory, e.target.value), 200);
-      });
-
-      document.getElementById("btnAlltimeLow").addEventListener("click", () => {
-        isAllTimeLow = !isAllTimeLow;
-        document.getElementById("btnAlltimeLow").classList.toggle("active", isAllTimeLow);
-        document.getElementById("gridTitle").innerText = isAllTimeLow ? "🔥 All-Time Low Deals" : "All Tracked Products";
-        loadProducts(currentCategory, document.getElementById("searchInput").value);
-      });
-
-      document.getElementById("btnScrape").addEventListener("click", async () => {
-        const btn = document.getElementById("btnScrape");
-        btn.innerText = "⏳ Live Scraping...";
-        btn.disabled = true;
-        try {
-          const r = await fetch("/api/scrape", { method: "POST" });
-          if (!r.ok) throw new Error("Flask backend not running");
-          alert("Live API Scrape Completed!");
-          loadStats();
-          loadCategories();
-          loadProducts(currentCategory);
-        } catch(err) {
-          alert("Static preview mode: Live scraper requires running python app.py locally!");
-        } finally {
-          btn.innerText = "⚡ Live Scrape";
-          btn.disabled = false;
-        }
-      });
-
-      document.getElementById("btnCloseModal").onclick = () => {
-        document.getElementById("priceModal").classList.remove("active");
-      };
-    });
-
-    async function loadStats() {
-      const d = await apiFetch("/api/stats", "data/stats.json");
-      if (!d) return;
-      document.getElementById("statProducts").innerText = d.total_products;
-      document.getElementById("totalCountBadge").innerText = d.total_products;
-      document.getElementById("statCategories").innerText = d.total_categories;
-      document.getElementById("statRecords").innerText = d.total_records;
-      document.getElementById("statLowDeals").innerText = d.alltime_low_cnt || 0;
+    function switchView(view) {
+      document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+      document.getElementById('view-' + view).classList.add('active');
+      document.querySelectorAll('.nav-item').forEach(n => n.classList.toggle('active', n.dataset.view === view));
+      if (view === 'analytics') renderAnalyticsCharts();
+      if (view === 'flash') loadFlashSales();
+      if (view === 'fests') loadCampaigns();
+      if (view === 'deals') loadDeals();
     }
 
-    async function loadCategories() {
-      const cats = await apiFetch("/api/categories", "data/categories.json");
-      if (!cats) return;
-      const el = document.getElementById("categoryTree");
+    // ── Init ────────────────────────────────────────────────────────────────
+    document.addEventListener('DOMContentLoaded', () => {
+      loadStats();
+      loadCategories();
+      loadOverview();
+      loadProducts();
 
-      el.innerHTML = cats.map(c => `
+      document.getElementById('searchInput').addEventListener('input', e => {
+        clearTimeout(searchTimer);
+        searchTimer = setTimeout(() => loadProducts(currentCategory, e.target.value), 220);
+      });
+
+      document.getElementById('btnAlltimeLow').addEventListener('click', toggleLow);
+      document.getElementById('btnAlltimeLow2').addEventListener('click', toggleLow);
+      document.getElementById('btnExport').addEventListener('click', () => window.open('/api/export.csv', '_blank'));
+
+      document.getElementById('btnScrape').addEventListener('click', async () => {
+        const btn = document.getElementById('btnScrape');
+        btn.innerText = '⏳ Scraping...'; btn.disabled = true;
+        try {
+          const r = await fetch('/api/scrape', { method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify({pages: 5}) });
+          if (!r.ok) throw new Error('backend not running');
+          toast('Live scrape completed!');
+          location.reload();
+        } catch(err) {
+          toast('Static preview mode — run `python app.py` for live scraping', true);
+        } finally { btn.innerText = '⚡ Live Scrape'; btn.disabled = false; }
+      });
+
+      document.getElementById('btnCloseModal').onclick = () =>
+        document.getElementById('priceModal').classList.remove('active');
+      document.getElementById('priceModal').addEventListener('click', e => {
+        if (e.target === e.currentTarget) e.currentTarget.classList.remove('active');
+      });
+    });
+
+    function toast(msg, warn = false) {
+      const t = document.createElement('div');
+      t.className = 'toast';
+      t.style.borderColor = warn ? 'var(--yellow)' : 'var(--green)';
+      t.style.color = warn ? 'var(--yellow)' : 'var(--green)';
+      t.innerText = msg;
+      document.body.appendChild(t);
+      setTimeout(() => t.remove(), 4000);
+    }
+
+    // ── Stats ───────────────────────────────────────────────────────────────
+    async function loadStats() {
+      const d = await apiFetch('/api/stats', 'data/stats.json');
+      if (!d) return;
+      document.getElementById('statProducts').innerText = fmt(d.total_products);
+      document.getElementById('totalCountBadge').innerText = fmt(d.total_products);
+      document.getElementById('statCategories').innerText = fmt(d.total_categories);
+      document.getElementById('statRecords').innerText = fmt(d.total_records);
+      document.getElementById('statLowDeals').innerText = fmt(d.alltime_low_cnt || 0);
+      document.getElementById('statFlash').innerText = fmt(d.flash_sale_cnt || 0);
+      document.getElementById('statCamps').innerText = fmt(d.campaign_cnt || 0);
+    }
+
+    // ── Categories ──────────────────────────────────────────────────────────
+    async function loadCategories() {
+      const cats = await apiFetch('/api/categories', 'data/categories.json');
+      if (!cats) return;
+      document.getElementById('categoryTree').innerHTML = cats.map(c => `
         <div class="cat-group">
           <div class="cat-item" data-cat="${c.id}" onclick="toggleCat(event, ${c.id})">
-            <span>${c.children && c.children.length > 0 ? '📁' : '📄'} ${c.name}</span>
-            <span class="cat-num">${c.item_count || (c.children ? c.children.reduce((a,b)=>a+(b.item_count||0),0) : 0)}</span>
+            <span>${c.children && c.children.length ? '📁' : '📄'} ${c.name}</span>
+            <span class="cat-num">${fmt(c.item_count || (c.children ? c.children.reduce((a,b)=>a+(b.item_count||0),0) : 0))}</span>
           </div>
-          ${c.children && c.children.length > 0 ? `
+          ${c.children && c.children.length ? `
             <div class="sub-tree" id="sub-${c.id}">
               ${c.children.map(sub => `
                 <div class="cat-item" data-cat="${sub.id}" onclick="selectCat(event, ${sub.id})">
-                  <span>${sub.name}</span>
-                  <span class="cat-num">${sub.item_count || 0}</span>
-                </div>
-              `).join('')}
-            </div>
-          ` : ''}
-        </div>
-      `).join("");
+                  <span>${sub.name}</span><span class="cat-num">${fmt(sub.item_count || 0)}</span>
+                </div>`).join('')}
+            </div>` : ''}
+        </div>`).join('');
     }
-
-    function toggleCat(e, catId) {
-      e.stopPropagation();
-      const sub = document.getElementById(`sub-${catId}`);
-      if (sub) sub.classList.toggle("collapsed");
-      selectCat(e, catId);
-    }
-
-    function selectCat(e, catId) {
+    function toggleCat(e, id) { e.stopPropagation(); const s = document.getElementById('sub-'+id); if (s) s.classList.toggle('collapsed'); selectCat(e, id); }
+    function selectCat(e, id) {
       if (e) e.stopPropagation();
-      document.querySelectorAll(".cat-item").forEach(b => b.classList.remove("active"));
-      const target = e ? e.currentTarget : document.querySelector(`[data-cat="${catId}"]`);
-      if (target) target.classList.add("active");
-      currentCategory = catId || null;
-      loadProducts(currentCategory, document.getElementById("searchInput").value);
+      document.querySelectorAll('.cat-item').forEach(b => b.classList.remove('active'));
+      const t = e ? e.currentTarget : document.querySelector(`[data-cat="${id}"]`);
+      if (t) t.classList.add('active');
+      currentCategory = id || null;
+      switchView('products');
+      loadProducts(currentCategory, searchValue());
     }
 
-    async function loadProducts(catId = null, search = "") {
-      let url = `/api/products`;
-      const params = [];
-      if (catId) params.push(`category_id=${catId}`);
-      if (search) params.push(`search=${encodeURIComponent(search)}`);
-      if (isAllTimeLow) params.push(`alltime_low=true`);
-      params.push(`limit=${GRID_LIMIT}`);
-      if (params.length > 0) url += `?${params.join('&')}`;
+    // ── Overview ────────────────────────────────────────────────────────────
+    async function loadOverview() {
+      loadFlashSales(true);
+      loadCampaigns(true);
+      const raw = await apiFetch('/api/price-drops?limit=8', 'data/analytics.json');
+      const drops = Array.isArray(raw) ? raw : (raw && raw.price_drops) || [];
+      renderDropsInto(drops.slice(0, 8), 'overviewDrops');
+    }
 
-      let prods = await apiFetch(url, null);
-
-      if (!prods) {
-        if (!allProductsCache) {
-          allProductsCache = await apiFetch("/api/products", "data/products.json") || [];
-        }
-        prods = allProductsCache.filter(p => {
-          if (catId && p.category_id !== catId) return false;
-          if (search && !p.name.toLowerCase().includes(search.toLowerCase())) return false;
-          if (isAllTimeLow && !(p.min_price && p.price <= p.min_price * 1.02)) return false;
-          return true;
-        }).slice(0, GRID_LIMIT);
-      }
-
-      const grid = document.getElementById("productsGrid");
-
-      if (prods.length === 0) {
-        grid.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 3rem; color: var(--text-muted);">No products found.</div>`;
+    // ── Flash sales ─────────────────────────────────────────────────────────
+    async function loadFlashSales(overview = false) {
+      const items = await apiFetch('/api/flash-sales', 'data/flash_sales.json');
+      if (overview) {
+        const el = document.getElementById('overviewFlash');
+        if (!items || !items.length) { el.innerHTML = '<div class="empty">No flash sales discovered yet.</div>'; return; }
+        el.innerHTML = items.slice(0, 10).map(flashCard).join('');
         return;
       }
+      const grid = document.getElementById('flashGrid');
+      if (!items || !items.length) { grid.innerHTML = '<div class="empty">No flash sales discovered yet.</div>'; return; }
+      grid.innerHTML = items.map(flashCard).join('');
+    }
 
-      grid.innerHTML = prods.map(p => {
+    function flashCard(f) {
+      const disc = f.discount ? `<div class="disc-badge">-${f.discount}%</div>` : '';
+      return `
+        <div class="flash-card" onclick="openLink('${f.url || ''}')">
+          <div class="flash-img">${disc}<img loading="lazy" src="${f.image || 'https://via.placeholder.com/200'}" alt=""></div>
+          <div class="flash-body">
+            <div class="flash-title">${f.name}</div>
+            <div><span class="flash-price">৳${f.price ?? ''}</span>${f.original ? `<span class="flash-orig">৳${f.original}</span>` : ''}</div>
+          </div>
+        </div>`;
+    }
+
+    function openLink(url) { if (url) window.open(url, '_blank'); }
+
+    // ── Campaigns ───────────────────────────────────────────────────────────
+    async function loadCampaigns(overview = false) {
+      if (!campaignsCache) campaignsCache = await apiFetch('/api/campaigns', 'data/campaigns.json');
+      const camps = campaignsCache || [];
+      const el = document.getElementById(overview ? 'overviewCamps' : 'festGrid');
+      if (!camps.length) { el.innerHTML = '<div class="empty">No campaigns discovered yet.</div>'; return; }
+      const subset = overview ? camps.slice(0, 12) : camps;
+      el.innerHTML = subset.map(c => `
+        <div class="camp-card" onclick="openLink('${c.url || ''}')">
+          <div class="camp-badge">${c.badge || '📣'}</div>
+          <div class="camp-name">${c.name}</div>
+          <div class="camp-section">${c.section || 'campaign'}</div>
+        </div>`).join('');
+    }
+
+    // ── Deals ───────────────────────────────────────────────────────────────
+    function setDealTab(tab) {
+      dealTab = tab;
+      ['drops','discounts','sellers','movers'].forEach(t => {
+        document.getElementById('tab' + t[0].toUpperCase() + t.slice(1)).classList.toggle('active', t === tab);
+      });
+      loadDeals();
+    }
+
+    async function loadDeals() {
+      const el = document.getElementById('dealsList');
+      el.innerHTML = '<div class="empty">Loading...</div>';
+      let data;
+      if (dealTab === 'drops') data = await apiFetch('/api/price-drops?limit=60', 'data/analytics.json');
+      else if (dealTab === 'discounts') data = await apiFetch('/api/top-discounts?limit=60', 'data/analytics.json');
+      else if (dealTab === 'sellers') data = await apiFetch('/api/top-sellers?limit=60', 'data/analytics.json');
+      else data = await apiFetch('/api/price-movers?days=7&limit=60', 'data/analytics.json');
+
+      if (Array.isArray(data)) data = data; else if (data) data = data[dealTab === 'drops' ? 'price_drops' : dealTab === 'discounts' ? 'top_discounts' : dealTab === 'sellers' ? 'top_sellers' : 'price_movers'] || [];
+      else data = [];
+
+      if (!data.length) { el.innerHTML = '<div class="empty">No data available.</div>'; return; }
+
+      if (dealTab === 'drops') {
+        el.innerHTML = data.map((p, i) => rankItem(i + 1, p, p.image, p.name, `${p.category_name || ''}`, p.drop_pct + '%', 'down', '৳' + p.current_price));
+      } else if (dealTab === 'discounts') {
+        el.innerHTML = data.map((p, i) => rankItem(i + 1, p, p.image, p.name, `${p.category_name || ''}`, p.discount + '% off', 'down', '৳' + p.price));
+      } else if (dealTab === 'sellers') {
+        el.innerHTML = data.map((p, i) => rankItem(i + 1, p, p.image, p.name, `★ ${p.rating || '—'} · ${fmt(p.review_cnt)} reviews`, fmt(p.sold_cnt) + ' sold', '', '৳' + p.price));
+      } else {
+        el.innerHTML = data.map((p, i) => {
+          const cls = p.change_pct >= 0 ? 'up' : 'down';
+          const arrow = p.change_pct >= 0 ? '↑' : '↓';
+          return rankItem(i + 1, p, p.image, p.name, `${p.category_name || ''}`, arrow + ' ' + Math.abs(p.change_pct) + '%', cls, '৳' + p.current_price);
+        });
+      }
+    }
+
+    function rankItem(pos, p, img, name, meta, big, bigCls, val) {
+      return `
+        <div class="rank-item" onclick="showProductHistory('${p.item_id}')">
+          <div class="rank-pos">#${pos}</div>
+          <div class="rank-img"><img loading="lazy" src="${img || 'https://via.placeholder.com/100'}" alt=""></div>
+          <div class="rank-info">
+            <div class="rank-name">${name}</div>
+            <div class="rank-meta">${meta || ''}</div>
+          </div>
+          <div class="rank-val">
+            ${big ? `<div class="big ${bigCls || ''}">${big}</div>` : ''}
+            <div class="rank-meta">${val || ''}</div>
+          </div>
+        </div>`;
+    }
+
+    function renderDropsInto(rows, id) {
+      const el = document.getElementById(id);
+      if (!rows.length) { el.innerHTML = '<div class="empty">No drops found.</div>'; return; }
+      el.innerHTML = rows.map((p, i) => rankItem(i + 1, p, p.image, p.name, p.category_name || '', p.drop_pct + '%', 'down', '৳' + p.current_price)).join('');
+    }
+
+    // ── Products grid ───────────────────────────────────────────────────────
+    function toggleLow() {
+      isAllTimeLow = !isAllTimeLow;
+      document.getElementById('btnAlltimeLow').classList.toggle('active', isAllTimeLow);
+      document.getElementById('btnAlltimeLow2').classList.toggle('active', isAllTimeLow);
+      loadProducts(currentCategory, searchValue());
+    }
+
+    async function loadProducts(catId = null, search = '') {
+      const sort = document.getElementById('sortSelect') ? document.getElementById('sortSelect').value : 'recent';
+      let url = '/api/products';
+      const params = [];
+      if (catId) params.push('category_id=' + catId);
+      if (search) params.push('search=' + encodeURIComponent(search));
+      if (isAllTimeLow) params.push('alltime_low=true');
+      params.push('limit=' + GRID_LIMIT);
+      url += '?' + params.join('&');
+
+      let prods = await apiFetch(url, null);
+      if (!prods) {
+        if (!allProductsCache) allProductsCache = await apiFetch('/api/products', 'data/products.json') || [];
+        prods = allProductsCache.filter(p => {
+          if (catId && p.category_id !== catId) return false;
+          if (search && !(p.name || '').toLowerCase().includes(search.toLowerCase())) return false;
+          if (isAllTimeLow && !(p.min_price && p.price <= p.min_price * 1.02)) return false;
+          return true;
+        });
+      }
+
+      prods = sortProducts(prods, sort);
+      const grid = document.getElementById('productsGrid');
+      document.getElementById('productCount').innerText = fmt(prods.length) + ' products';
+
+      if (!prods.length) { grid.innerHTML = '<div class="empty">No products found.</div>'; return; }
+
+      const shown = prods.slice(0, GRID_LIMIT);
+      grid.innerHTML = shown.map(p => {
         const isMin = p.min_price && p.price <= p.min_price * 1.02;
         return `
           <div class="product-card" onclick="showProductHistory('${p.item_id}')">
             <div class="img-container">
-              ${isMin ? `<div class="badge-low">LOWEST</div>` : ''}
+              ${isMin ? '<div class="badge-low">LOWEST</div>' : ''}
               ${p.unit_str ? `<div class="badge-unit">${p.unit_str}</div>` : ''}
               <img loading="lazy" src="${p.image || 'https://via.placeholder.com/200'}" alt="${p.name}">
             </div>
             <div class="prod-body">
-              <div class="prod-title">${p.name}</div>
+              <div>
+                <div class="prod-brand">${p.brand || p.category_name || ''}</div>
+                <div class="prod-title">${p.name}</div>
+              </div>
               <div>
                 <div class="prod-meta">
                   <span class="prod-price">৳${p.price}</span>
                   ${p.original ? `<span class="prod-orig">৳${p.original}</span>` : ''}
+                  ${p.discount ? `<span class="disc-badge" style="position:static">-${p.discount}%</span>` : ''}
                 </div>
-                ${p.unit_str ? `<div class="prod-unit-price">Unit: ${p.unit_str}</div>` : ''}
+                ${p.unit_str ? `<div class="prod-unit">Unit: ${p.unit_str}</div>` : ''}
               </div>
             </div>
-          </div>
-        `;
-      }).join("");
+          </div>`;
+      }).join('');
 
-      if (prods.length >= GRID_LIMIT) {
-        grid.insertAdjacentHTML("beforeend", `
-          <div style="grid-column: 1/-1; text-align: center; padding: 1rem; color: var(--text-muted); font-size: 0.85rem;">
-            Showing first ${GRID_LIMIT} of ${prods.length}+ products — refine your search or pick a category.
-          </div>
-        `);
+      if (prods.length > GRID_LIMIT) {
+        grid.insertAdjacentHTML('beforeend', `<div class="empty">Showing ${GRID_LIMIT} of ${fmt(prods.length)} — refine search or pick a category.</div>`);
       }
     }
 
-    async function showProductHistory(itemId) {
-      const data = await apiFetch(`/api/product/${itemId}`, `data/products/${itemId}.json`);
-      if (!data || !data.history) return;
-
-      const p = data.product;
-      const history = dedupeByDate(data.history);
-      const unitHist = dedupeByDate(data.unit_history || []);
-
-      document.getElementById("mProdName").innerText = p.name;
-      document.getElementById("mProdSub").innerText = `Brand: ${p.brand || 'Generic'} • Unit: ${p.unit_qty ? (p.unit_qty + ' ' + p.unit) : 'N/A'}`;
-
-      document.getElementById("mLowest").innerText = `৳${data.stats.min_price}`;
-      document.getElementById("mHighest").innerText = `৳${data.stats.max_price}`;
-      document.getElementById("mAverage").innerText = `৳${Math.round(data.stats.avg_price)}`;
-      
-      if (unitHist.length > 0) {
-        const minUnit = Math.min(...unitHist.map(u => u.unit_price));
-        document.getElementById("mUnitLowest").innerText = `৳${minUnit} / ${p.unit}`;
-      } else {
-        document.getElementById("mUnitLowest").innerText = `N/A`;
+    function sortProducts(list, sort) {
+      const a = [...list];
+      switch (sort) {
+        case 'price_asc': a.sort((x,y) => (x.price||0) - (y.price||0)); break;
+        case 'price_desc': a.sort((x,y) => (y.price||0) - (x.price||0)); break;
+        case 'discount_desc': a.sort((x,y) => (y.discount||0) - (x.discount||0)); break;
+        case 'rating_desc': a.sort((x,y) => (y.rating||0) - (x.rating||0)); break;
+        default: a.sort((x,y) => (y.scraped_at||'').localeCompare(x.scraped_at||''));
       }
+      return a;
+    }
 
-      const modal = document.getElementById("priceModal");
-      modal.classList.add("active");
+    // ── Analytics charts ────────────────────────────────────────────────────
+    async function renderAnalyticsCharts() {
+      const data = await apiFetch('/api/analytics', 'data/analytics.json');
+      if (!data) return;
+      const catDist = data.category_distribution || [];
+      const discDist = data.discount_distribution || {};
 
-      const ctx = document.getElementById("priceChart").getContext("2d");
-      if (priceChart) priceChart.destroy();
-
-      const labels = history.map(h => h.scraped_at.split(" ")[0]);
-      const prices = history.map(h => h.price);
-      const unitPrices = (p.unit_qty && p.unit)
-        ? history.map(h => Math.round((h.price / p.unit_qty) * 100) / 100)
-        : [];
-
-      const datasets = [{
-        label: 'Price (৳)',
-        data: prices,
-        borderColor: '#ff6b00',
-        backgroundColor: 'rgba(255, 107, 0, 0.1)',
-        borderWidth: 3,
-        fill: true,
-        tension: 0.35
-      }];
-
-      if (unitPrices.length > 0) {
-        datasets.push({
-          label: `Unit Price (৳/${p.unit})`,
-          data: unitPrices,
-          borderColor: '#00f2fe',
-          borderWidth: 2,
-          borderDash: [4, 4],
-          yAxisID: 'y1'
+      if (catChart) catChart.destroy();
+      const catCtx = document.getElementById('chartCategories');
+      if (catCtx) {
+        catChart = new Chart(catCtx, {
+          type: 'doughnut',
+          data: {
+            labels: catDist.map(c => c.name),
+            datasets: [{ data: catDist.map(c => c.cnt), backgroundColor: palette(catDist.length), borderColor: 'rgba(0,0,0,0.4)', borderWidth: 1 }]
+          },
+          options: { responsive: true, maintainAspectRatio: true, plugins: { legend: { position: 'right', labels: { color: '#93a0b4', font: { size: 11 } } } } }
         });
       }
 
-      priceChart = new Chart(ctx, {
-        type: 'line',
-        data: { labels, datasets },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          interaction: { mode: 'index', intersect: false },
-          scales: {
-            x: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#9ca3af' } },
-            y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#ff6b00' } },
-            y1: unitPrices.length > 0 ? {
-              position: 'right',
-              grid: { drawOnChartArea: false },
-              ticks: { color: '#00f2fe' }
-            } : {}
+      if (discChart) discChart.destroy();
+      const discCtx = document.getElementById('chartDiscounts');
+      if (discCtx) {
+        discChart = new Chart(discCtx, {
+          type: 'bar',
+          data: {
+            labels: ['0–10%', '10–25%', '25–50%', '50–75%', '75–100%'],
+            datasets: [{ label: 'Products', data: [discDist.d0_10||0, discDist.d10_25||0, discDist.d25_50||0, discDist.d50_75||0, discDist.d75_100||0], backgroundColor: 'rgba(255,107,0,0.7)', borderRadius: 6 }]
           },
-          plugins: {
-            legend: { labels: { color: '#fff', font: { family: 'Plus Jakarta Sans', weight: 600 } } }
-          }
+          options: { responsive: true, maintainAspectRatio: true, scales: { x: { ticks: { color: '#93a0b4' }, grid: { display: false } }, y: { ticks: { color: '#93a0b4' }, grid: { color: 'rgba(255,255,255,0.05)' } } }, plugins: { legend: { display: false } } }
+        });
+      }
+    }
+
+    function palette(n) {
+      const base = ['#ff6b00','#00f2fe','#10b981','#f59e0b','#ef4444','#8b5cf6','#ec4899','#06b6d4','#84cc16','#f97316','#14b8a6','#6366f1','#d946ef','#22c55e','#eab308','#0ea5e9','#a855f7','#fb7185'];
+      return Array.from({length: n}, (_, i) => base[i % base.length]);
+    }
+
+    // ── Product detail modal ────────────────────────────────────────────────
+    async function showProductHistory(itemId) {
+      const data = await apiFetch('/api/product/' + itemId, 'data/products/' + itemId + '.json');
+      if (!data || !data.history || !data.history.length) { toast('No history for this product'); return; }
+      const p = data.product;
+      const history = dedupeByDate(data.history);
+
+      document.getElementById('mProdName').innerText = p.name;
+      document.getElementById('mProdSub').innerText = `Brand: ${p.brand || 'Generic'} • Category: ${p.category_name || '—'} • Unit: ${p.unit_qty ? p.unit_qty + ' ' + p.unit : 'N/A'}`;
+      document.getElementById('mLowest').innerText = '৳' + (data.stats.min_price ?? 0);
+      document.getElementById('mHighest').innerText = '৳' + (data.stats.max_price ?? 0);
+      document.getElementById('mAverage').innerText = '৳' + Math.round(data.stats.avg_price || 0);
+      document.getElementById('mProductLink').href = p.url || '#';
+
+      const unitPrices = (p.unit_qty && p.unit) ? history.map(h => Math.round((h.price / p.unit_qty) * 100) / 100) : [];
+      if (unitPrices.length) {
+        document.getElementById('mUnitLowest').innerText = '৳' + Math.min(...unitPrices) + ' / ' + p.unit;
+      } else {
+        document.getElementById('mUnitLowest').innerText = 'N/A';
+      }
+
+      document.getElementById('priceModal').classList.add('active');
+      const ctx = document.getElementById('priceChart').getContext('2d');
+      if (priceChart) priceChart.destroy();
+
+      const labels = history.map(h => (h.scraped_at || '').split(' ')[0]);
+      const datasets = [{
+        label: 'Price (৳)', data: history.map(h => h.price),
+        borderColor: '#ff6b00', backgroundColor: 'rgba(255,107,0,0.12)', borderWidth: 3, fill: true, tension: 0.35, pointRadius: 2
+      }];
+      if (unitPrices.length) {
+        datasets.push({ label: 'Unit Price (৳/' + p.unit + ')', data: unitPrices, borderColor: '#00f2fe', borderWidth: 2, borderDash: [4,4], yAxisID: 'y1', pointRadius: 0, tension: 0.35 });
+      }
+
+      priceChart = new Chart(ctx, {
+        type: 'line', data: { labels, datasets },
+        options: {
+          responsive: true, maintainAspectRatio: false, interaction: { mode: 'index', intersect: false },
+          scales: {
+            x: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#93a0b4', maxTicksLimit: 10 } },
+            y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#ff6b00' } },
+            y1: unitPrices.length ? { position: 'right', grid: { drawOnChartArea: false }, ticks: { color: '#00f2fe' } } : {}
+          },
+          plugins: { legend: { labels: { color: '#eef2f7', font: { family: 'Plus Jakarta Sans', weight: 600 } } } }
         }
       });
     }
