@@ -229,10 +229,10 @@
       "unit": "cm",
       "unit_qty": 41.0,
       "category_name": "Automotive",
-      "current_price": 450.0,
+      "current_price": 448.0,
       "min_price": 416.0,
       "max_price": 850.0,
-      "drop_pct": 47.1
+      "drop_pct": 47.3
     },
     {
       "item_id": "562380027",
@@ -1295,7 +1295,7 @@
     },
     {
       "name": "Computers",
-      "cnt": 1084
+      "cnt": 1086
     },
     {
       "name": "Groceries",
@@ -1395,8 +1395,8 @@
     }
   ],
   "discount_distribution": {
-    "d0_10": 1029,
-    "d10_25": 2474,
+    "d0_10": 1033,
+    "d10_25": 2453,
     "d25_50": 4012,
     "d50_75": 5662,
     "d75_100": 116
@@ -1540,6 +1540,16 @@
       "category_name": "Automotive",
       "current_price": 320.0,
       "old_price": 160.0,
+      "change_pct": 100.0
+    },
+    {
+      "item_id": "516034388",
+      "name": "Mobile Stand Pen 3 in 1",
+      "brand": "No Brand",
+      "image": "https://bd-live-21.slatic.net/kf/S9ad3f9a163064b0a9c0da95016712477O.jpg",
+      "category_name": "Books & Stationery",
+      "current_price": 58.0,
+      "old_price": 29.0,
       "change_pct": 100.0
     },
     {
@@ -1891,16 +1901,6 @@
       "current_price": 350.0,
       "old_price": 231.0,
       "change_pct": 51.5
-    },
-    {
-      "item_id": "102472826",
-      "name": "YAMAHA BIKE PVC Keychain Key ring Red Rubber Motorcycle Bike Car Collectible Gift New",
-      "brand": "No Brand",
-      "image": "https://static-01.daraz.com.bd/p/4e878de875d2d8044787ec0d15bec048.png",
-      "category_name": "Automotive",
-      "current_price": 80.0,
-      "old_price": 52.92,
-      "change_pct": 51.2
     }
   ]
 }
