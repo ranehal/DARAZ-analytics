@@ -53,19 +53,6 @@
       "drop_pct": 71.9
     },
     {
-      "item_id": "569503515",
-      "name": "4K Outdoor Sports Camera 1080P Mini Camera In Helmet Motorcycle Bike Filming Waterproof  Bicycle Action Video Recording Body Cam",
-      "brand": "No Brand",
-      "image": "https://bd-live-21.slatic.net/kf/S799aae5ebccd4582a3f0cdc0c997a3dcI.png",
-      "unit": null,
-      "unit_qty": null,
-      "category_name": "Cameras",
-      "current_price": 1038.0,
-      "min_price": 920.0,
-      "max_price": 3481.0,
-      "drop_pct": 70.2
-    },
-    {
       "item_id": "120977579",
       "name": "New Colorful Kinetic Sand Play Sand DIY Craft Toy for Kids 125g - Unisex, Creative Arts & Crafts for Children multicolor",
       "brand": "No Brand",
@@ -90,19 +77,6 @@
       "min_price": 92.0,
       "max_price": 249.0,
       "drop_pct": 63.1
-    },
-    {
-      "item_id": "575143131",
-      "name": "25pcs Page Photo Card A5-Binder Kpop Photo Albums Idol Cards Loose-leaf Collect Book Binder Photocard Holder",
-      "brand": "No Brand",
-      "image": "https://bd-live-21.slatic.net/kf/S4ba3ad8780ce4cda85a3729bf6a14e9fK.jpg",
-      "unit": "pcs",
-      "unit_qty": 25.0,
-      "category_name": "Books & Stationery",
-      "current_price": 539.0,
-      "min_price": 445.0,
-      "max_price": 1403.0,
-      "drop_pct": 61.6
     },
     {
       "item_id": "320610088",
@@ -378,6 +352,19 @@
       "drop_pct": 45.0
     },
     {
+      "item_id": "575143131",
+      "name": "25pcs Page Photo Card A5-Binder Kpop Photo Albums Idol Cards Loose-leaf Collect Book Binder Photocard Holder",
+      "brand": "No Brand",
+      "image": "https://bd-live-21.slatic.net/kf/S4ba3ad8780ce4cda85a3729bf6a14e9fK.jpg",
+      "unit": "pcs",
+      "unit_qty": 25.0,
+      "category_name": "Books & Stationery",
+      "current_price": 778.0,
+      "min_price": 445.0,
+      "max_price": 1403.0,
+      "drop_pct": 44.5
+    },
+    {
       "item_id": "272201168",
       "name": "Toyota Silicone Protecting Remote Key Case Cover for 3 button Corolla Axio Allion Premio Yaris Mark Hilux Vitz Rav4 Aqua Auris",
       "brand": "No Brand",
@@ -441,6 +428,19 @@
       "min_price": 169.0,
       "max_price": 300.0,
       "drop_pct": 43.7
+    },
+    {
+      "item_id": "340742139",
+      "name": "【3C VictoryEagle】Soft Silicone Protective for Sony A6300",
+      "brand": "No Brand",
+      "image": "https://static-01.daraz.com.bd/p/08b33917b098aaba03703424ef4a6ae8.jpg",
+      "unit": null,
+      "unit_qty": null,
+      "category_name": "Cameras",
+      "current_price": 779.0,
+      "min_price": 779.0,
+      "max_price": 1375.0,
+      "drop_pct": 43.3
     },
     {
       "item_id": "526629281",
@@ -803,22 +803,22 @@
       "discount": 81.0
     },
     {
-      "item_id": "521789755",
-      "name": "Resealable 12\"X16” Pack of 25 pcs Clear Plastic Reclosable Zipper Poly Bags with Resealable Lock Seal Zipper Plastic Storage Packet for Food Freezing Jewelry Clothes Docs Candy Cookies Snacks Vitamins Books Seeds",
-      "brand": "No Brand",
-      "image": "https://static-01.daraz.com.bd/p/bc66e1fa84c6f87619401be200510f2c.png",
-      "category_name": "Books & Stationery",
-      "price": 165.0,
-      "original": 850.0,
-      "discount": 81.0
-    },
-    {
       "item_id": "527025385",
       "name": "Resealable 12\"X16” Pack of 25 pcs Clear Plastic Reclosable Zipper Poly Bags with Resealable Lock Seal Zipper Plastic Storage Packet for Food Freezing Jewelry Clothes Docs Candy Cookies Snacks Vitamins Books Seeds",
       "brand": "No Brand",
       "image": "https://static-01.daraz.com.bd/p/bc66e1fa84c6f87619401be200510f2c.png",
       "category_name": "Books & Stationery",
       "price": 159.0,
+      "original": 850.0,
+      "discount": 81.0
+    },
+    {
+      "item_id": "521789755",
+      "name": "Resealable 12\"X16” Pack of 25 pcs Clear Plastic Reclosable Zipper Poly Bags with Resealable Lock Seal Zipper Plastic Storage Packet for Food Freezing Jewelry Clothes Docs Candy Cookies Snacks Vitamins Books Seeds",
+      "brand": "No Brand",
+      "image": "https://static-01.daraz.com.bd/p/bc66e1fa84c6f87619401be200510f2c.png",
+      "category_name": "Books & Stationery",
+      "price": 165.0,
       "original": 850.0,
       "discount": 81.0
     },
@@ -1279,23 +1279,23 @@
   "category_distribution": [
     {
       "name": "Automotive",
-      "cnt": 8683
+      "cnt": 9000
     },
     {
       "name": "Books & Stationery",
-      "cnt": 3037
+      "cnt": 3041
     },
     {
       "name": "Baby & Toys",
-      "cnt": 2561
+      "cnt": 2562
     },
     {
       "name": "Cameras",
-      "cnt": 2082
+      "cnt": 2149
     },
     {
       "name": "Computers",
-      "cnt": 1756
+      "cnt": 1767
     },
     {
       "name": "Groceries",
@@ -1395,10 +1395,10 @@
     }
   ],
   "discount_distribution": {
-    "d0_10": 1211,
-    "d10_25": 3622,
-    "d25_50": 6695,
-    "d50_75": 6562,
+    "d0_10": 1227,
+    "d10_25": 3654,
+    "d25_50": 7039,
+    "d50_75": 6567,
     "d75_100": 128
   },
   "price_movers": [
@@ -1421,6 +1421,16 @@
       "current_price": 2999.0,
       "old_price": 769.0,
       "change_pct": 290.0
+    },
+    {
+      "item_id": "569503515",
+      "name": "4K Outdoor Sports Camera 1080P Mini Camera In Helmet Motorcycle Bike Filming Waterproof  Bicycle Action Video Recording Body Cam",
+      "brand": "No Brand",
+      "image": "https://bd-live-21.slatic.net/kf/S799aae5ebccd4582a3f0cdc0c997a3dcI.png",
+      "category_name": "Cameras",
+      "current_price": 3481.0,
+      "old_price": 920.0,
+      "change_pct": 278.4
     },
     {
       "item_id": "226721797",
@@ -1723,6 +1733,16 @@
       "change_pct": 75.4
     },
     {
+      "item_id": "575143131",
+      "name": "25pcs Page Photo Card A5-Binder Kpop Photo Albums Idol Cards Loose-leaf Collect Book Binder Photocard Holder",
+      "brand": "No Brand",
+      "image": "https://bd-live-21.slatic.net/kf/S4ba3ad8780ce4cda85a3729bf6a14e9fK.jpg",
+      "category_name": "Books & Stationery",
+      "current_price": 778.0,
+      "old_price": 445.0,
+      "change_pct": 74.8
+    },
+    {
       "item_id": "257309602",
       "name": "K-POP BTS Notebook/Notepad.",
       "brand": "No Brand",
@@ -1881,26 +1901,6 @@
       "current_price": 58.0,
       "old_price": 36.0,
       "change_pct": 61.1
-    },
-    {
-      "item_id": "1579657468",
-      "name": "【Best SKU活动价 Guaranteed】 INTEL QG82915GMS QG82945GSE SLB2R QG82945GMS",
-      "brand": "No Brand",
-      "image": "https://laz-img-sg.alicdn.com/p/ecb9fbef40cecc130076c427e99a0a9c.jpg",
-      "category_name": "Computers",
-      "current_price": 1335.0,
-      "old_price": 835.0,
-      "change_pct": 59.9
-    },
-    {
-      "item_id": "1597866587",
-      "name": "Intel Core i3 Desktop PC 4GB RAM, 120GB SSD, 2GB Built In Graphics Ready Setup Computer",
-      "brand": "No Brand",
-      "image": "https://static-01.daraz.com.bd/p/dc228d65336163bb3d6481a6f1722c11.png",
-      "category_name": "Computers",
-      "current_price": 14890.0,
-      "old_price": 9315.0,
-      "change_pct": 59.8
     }
   ]
 }
